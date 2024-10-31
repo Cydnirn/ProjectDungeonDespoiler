@@ -1,6 +1,3 @@
-#include <ncurses.h>
-#include <string>
-
 #include "Utils/Game.h"
 
 int main(int argv, char** argc)
