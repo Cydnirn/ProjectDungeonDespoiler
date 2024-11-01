@@ -5,11 +5,11 @@
 #include "Game.h"
 
 #include <cstdlib>
-#include <ncurses.h>
+#include <ncursesw/ncurses.h>
 #include <string>
 #include <unistd.h>
 
-namespace ProjectDungeonDespoiler {
+namespace DespoilerEngine {
     WINDOW* main_window;
     WINDOW* game_window;
     Game::rect game_area = {{0, 0}, {0, 0}};

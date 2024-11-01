@@ -4,19 +4,15 @@ project(ProjectDungeonDespoiler)
 set(CMAKE_CXX_STANDARD 20)
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
-
-if(WIN32)
-    set(CMAKE_GENERATOR "MinGW Makefiles")
-else ()
-    set(CMAKE_GENERATOR "Unix Makefiles")
-endif()
-
+message(STATUS "Curses library found at ${CURSES_LIBRARIES}")
 
 
 add_executable(ProjectDungeonDespoiler src/main.cpp
-        src/Utils/Creature.cpp
-        src/Utils/Creature.h
-        src/Utils/Game.cpp
-        src/Utils/Game.h)
+        src/Engine/Creature.cpp
+        src/Engine/Creature.h
+        src/Engine/Game.cpp
+        src/Engine/Game.h
+        src/Engine/Scene.cpp
+        src/Engine/Scene.h)
 
 target_link_libraries(ProjectDungeonDespoiler ${CURSES_LIBRARIES})

@@ -5,9 +5,9 @@
 #ifndef GAME_H
 #define GAME_H
 #include <cstdint>
-#include <ncurses.h>
+#include <ncursesw/ncurses.h>
 
-namespace ProjectDungeonDespoiler {
+namespace DespoilerEngine {
 
 class Game {
 

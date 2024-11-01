@@ -1,11 +1,11 @@
-#include "Utils/Game.h"
+#include "Engine/Game.h"
 
 int main(int argv, char** argc)
 {
-    if (const int init_status = ProjectDungeonDespoiler::Game::init(); init_status == 0)
+    if (const int init_status = DespoilerEngine::Game::init(); init_status == 0)
     {
-        ProjectDungeonDespoiler::Game().run();
+        DespoilerEngine::Game().run();
     }
-    ProjectDungeonDespoiler::Game::close();
+    DespoilerEngine::Game::close();
     return 0;
 }
