@@ -45,6 +45,7 @@ namespace DespoilerEngine {
         }
 
         start_color();
+        init_pair(1, COLOR_RED, COLOR_BLACK);
 
         int infopanel_height = 4;
         screen_area = {{0, 0}, {80, 24}};
@@ -70,6 +71,9 @@ namespace DespoilerEngine {
         whline(main_window, '-', static_cast<int>(screen_area.width() - 2));
 
         wrefresh(main_window);
+        wattron(game_window, COLOR_PAIR(1));
+        mvwaddch(game_window, 9, 9, '!');
+        wattroff(game_window, COLOR_PAIR(1));
         mvwaddch(game_window, player.position.y, player.position.x, player.display_char);
         wrefresh(game_window);
 
@@ -106,6 +110,10 @@ namespace DespoilerEngine {
                 default:
                     break;
             }
+
+            wattron(game_window, COLOR_PAIR(1));
+            mvwaddch(game_window, 9, 9, '!');
+            wattroff(game_window, COLOR_PAIR(1));
             wattron(game_window, A_BOLD);
             mvwaddch(game_window,player.position.y, player.position.x, player.display_char);
             wattroff(game_window, A_BOLD);

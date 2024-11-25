@@ -14,7 +14,9 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Game.cpp
         src/Engine/Game.h
         src/Engine/Scene.cpp
-        src/Engine/Scene.h)
+        src/Engine/Scene.h
+        src/Engine/ScreenManager.cpp
+        src/Engine/ScreenManager.h)
 
 target_link_libraries(ProjectDungeonDespoiler ${CURSES_LIBRARIES})
 
