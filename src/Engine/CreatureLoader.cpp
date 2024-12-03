@@ -5,7 +5,7 @@
 #include "CreatureLoader.h"
 #include <filesystem>
 #include <iostream>
-#include <bits/random.h>
+#include <random>
 
 #include "../Engine/Creature.h"
 

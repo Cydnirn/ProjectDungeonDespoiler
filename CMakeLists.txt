@@ -19,12 +19,17 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Scene.h
         src/Engine/ScreenManager.cpp
         src/Engine/ScreenManager.h
-        src/Creatures/CreatureLoader.cpp
-        src/Creatures/CreatureLoader.h
+        src/Engine/CreatureLoader.cpp
 )
 
 target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json pdcurses::pdcurses)
-
+add_custom_command(
+        TARGET ProjectDungeonDespoiler POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/src/resources
+        $<TARGET_FILE_DIR:ProjectDungeonDespoiler>/resources
+        USES_TERMINAL
+)
 
 # if (WIN32)
 #     set(CURSES_DLLS

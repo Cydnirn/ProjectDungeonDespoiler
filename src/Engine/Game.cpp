@@ -6,7 +6,7 @@
 #include <curses.h>
 #include <unistd.h>
 #include <string>
-#include "../Creatures/CreatureLoader.h"
+#include "CreatureLoader.h"
 
 namespace DespoilerEngine {
     CreatureCollection LowCreatures;
@@ -32,8 +32,8 @@ namespace DespoilerEngine {
 
     void Game::loadCreature()
     {
-        LowCreatures.Creatures = CreatureLoader::loadCreatures("Creatures/Low");
-        MediumCreatures.Creatures = CreatureLoader::loadCreatures("Creatures/Medium");
+        LowCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/low");
+        MediumCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/medium");
     }
 
 
