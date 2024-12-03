@@ -13,7 +13,7 @@ Dependencies:
 - CMake
 - C++ Compiler
 - Conan
-- ncurses
+- pdcurses
 - nlohmann_json
 
 ### How to Build dependencies
@@ -28,7 +28,7 @@ conan profile detect
 
 2. Install dependencies
 ```bash
-conan install . --build=missing
+conan install . --build=missing -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True
 ```
 
 3. Build Project
