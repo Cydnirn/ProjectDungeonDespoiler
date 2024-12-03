@@ -3,6 +3,7 @@
 //
 
 #include "Scene.h"
+#include <curses.h>
 
 namespace DespoilerEngine
 {

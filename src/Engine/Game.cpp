@@ -3,17 +3,17 @@
 //
 
 #include "Game.h"
-
-#include <cstdlib>
-#include <ncursesw/ncurses.h>
-#include <string>
+#include <curses.h>
 #include <unistd.h>
+#include <string>
+
 
 namespace DespoilerEngine {
     WINDOW* main_window;
     WINDOW* game_window;
     Game::rect game_area = {{0, 0}, {0, 0}};
     Game::rect screen_area = {{0, 0}, {0, 0}};
+
     void Game::drawBox(WINDOW* window, int pos_y, int pos_x, bool refresh)
     {
         if(refresh) werase(main_window);
@@ -28,7 +28,6 @@ namespace DespoilerEngine {
         nodelay(window, false);
     }
 
-
     int Game::init()
     {
         main_window = initscr();
@@ -36,7 +35,7 @@ namespace DespoilerEngine {
         noecho();
         clear();
         refresh();
-        curs_set(0); //Make cursor invisible
+        curs_set(0); // Make cursor invisible
         if(!has_colors())
         {
             endwin();
@@ -45,6 +44,7 @@ namespace DespoilerEngine {
         }
 
         start_color();
+        init_pair(1, COLOR_RED, COLOR_BLACK);
 
         int infopanel_height = 4;
         screen_area = {{0, 0}, {80, 24}};
@@ -61,7 +61,7 @@ namespace DespoilerEngine {
 
     void Game::run()
     {
-        player.display_char = *"0";
+        player.display_char = '0';
         player.position = {1, 1};
         /* Main game loop */
         bool exit_req = false;
@@ -70,6 +70,9 @@ namespace DespoilerEngine {
         whline(main_window, '-', static_cast<int>(screen_area.width() - 2));
 
         wrefresh(main_window);
+        wattron(game_window, COLOR_PAIR(1));
+        mvwaddch(game_window, 9, 9, '!');
+        wattroff(game_window, COLOR_PAIR(1));
         mvwaddch(game_window, player.position.y, player.position.x, player.display_char);
         wrefresh(game_window);
 
@@ -89,31 +92,35 @@ namespace DespoilerEngine {
                         player.position.y -= 1;
                     break;
                 case KEY_DOWN:
-            case 's':
+                case 's':
                     if(player.position.y < game_area.bottom())
                         player.position.y += 1;
                     break;
                 case KEY_LEFT:
                 case 'a':
                     if(player.position.x > game_area.left() + 1)
-                        player.position.x -=1;
-                        break;
-                    case KEY_RIGHT:
+                        player.position.x -= 1;
+                    break;
+                case KEY_RIGHT:
                 case 'd':
                     if(player.position.x < game_area.right() - 2)
                         player.position.x += 1;
-                        break;
+                    break;
                 default:
                     break;
             }
+
+            wattron(game_window, COLOR_PAIR(1));
+            mvwaddch(game_window, 9, 9, '!');
+            wattroff(game_window, COLOR_PAIR(1));
             wattron(game_window, A_BOLD);
-            mvwaddch(game_window,player.position.y, player.position.x, player.display_char);
+            mvwaddch(game_window, player.position.y, player.position.x, player.display_char);
             wattroff(game_window, A_BOLD);
             wrefresh(main_window);
             wrefresh(game_window);
             if (exit_req) break;
             usleep(10000);
-        };
+        }
     }
 
     void Game::close()
@@ -121,4 +128,4 @@ namespace DespoilerEngine {
         endwin();
     }
 
-} // ProjectDungeonDespoiler
+} // DespoilerEngine
