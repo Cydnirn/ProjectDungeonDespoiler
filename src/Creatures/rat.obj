@@ -1,0 +1,10 @@
+{
+    "name": "Rat",
+    "desc": "A basic rat",
+    "stats": {
+        "vigor": 5,
+        "strength": 5,
+        "agility": 5,
+        "intelligence": 5
+    }
+}

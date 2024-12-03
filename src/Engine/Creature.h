@@ -2,6 +2,7 @@
 #define CREATURE_H
 
 #include <cstdint>
+#include <string>
 
 namespace DespoilerEngine {
 
@@ -13,16 +14,26 @@ class Creature {
         uint8_t intelligence;
     };
 
+private:
+    std::string description;
+    std::string name;
+    Stats stats{};
     int health = 10;
-    Stats creatureStats = {};
 
 public:
-    explicit Creature(const Stats stats) : creatureStats(stats) {}
     Creature() = default;
+    Creature(std::string  name, const std::string& desc, Stats  stats);
 
-    void setHealth(int newHealth) { health = newHealth; }
-    [[nodiscard]] Stats getStats() const { return creatureStats; }
-    [[nodiscard]] int getHealth() const { return health; }
+    // Load a creature from a JSON file
+    static Creature fromJsonFile(const std::string& filepath);
+
+    // Save a creature to a JSON file
+    void toJsonFile(const std::string& filepath) const;
+
+    // Getters
+    [[nodiscard]] const std::string& getName() const;
+    [[nodiscard]] const Stats& getStats() const;
+    [[nodiscard]] const int* getHealth() const;
 };
 
 } // namespace DespoilerEngine

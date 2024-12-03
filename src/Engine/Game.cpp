@@ -35,6 +35,8 @@ namespace DespoilerEngine {
         noecho();
         clear();
         refresh();
+        resize_term(0,0);;
+        PDC_set_title("Dungeon Despoiler");
         curs_set(0); // Make cursor invisible
         if(!has_colors())
         {
@@ -46,10 +48,13 @@ namespace DespoilerEngine {
         start_color();
         init_pair(1, COLOR_RED, COLOR_BLACK);
 
-        int infopanel_height = 4;
-        screen_area = {{0, 0}, {80, 24}};
-        game_area = {{0, 0}, {static_cast<int_fast8_t>(screen_area.width() - 2), static_cast<int_fast8_t>(screen_area.height() - infopanel_height - 4)}};
-        game_window = newwin(static_cast<int>(screen_area.height() - infopanel_height - 2), static_cast<int>(screen_area.width() - 2),
+        constexpr int_fast8_t screen_width = 80;
+        constexpr int_fast8_t screen_height = 24;
+        constexpr int infopanel = 4;
+
+        screen_area = {{0, 0}, {screen_width, screen_height}};
+        game_area = {{0, 0}, {static_cast<int_fast8_t>(screen_area.width() - 2), static_cast<int_fast8_t>(screen_area.height() - infopanel - 4)}};
+        game_window = newwin(static_cast<int>(screen_area.height() - infopanel - 2), static_cast<int>(screen_area.width() - 2),
                              static_cast<int>(screen_area.top() + 1), static_cast<int>(screen_area.left() + 1));
         main_window = newwin(static_cast<int>(screen_area.height()), static_cast<int>(screen_area.width()), 0, 0);
 
@@ -110,9 +115,6 @@ namespace DespoilerEngine {
                     break;
             }
 
-            wattron(game_window, COLOR_PAIR(1));
-            mvwaddch(game_window, 9, 9, '!');
-            wattroff(game_window, COLOR_PAIR(1));
             wattron(game_window, A_BOLD);
             mvwaddch(game_window, player.position.y, player.position.x, player.display_char);
             wattroff(game_window, A_BOLD);
