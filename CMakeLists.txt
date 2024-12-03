@@ -20,6 +20,7 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/ScreenManager.cpp
         src/Engine/ScreenManager.h
         src/Creatures/CreatureLoader.cpp
+        src/Creatures/CreatureLoader.h
 )
 
 target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json pdcurses::pdcurses)

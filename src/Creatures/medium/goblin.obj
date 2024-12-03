@@ -1,0 +1,10 @@
+{
+    "name": "Goblin",
+    "desc": "A basic Goblin",
+    "stats": {
+        "vigor": 2,
+        "strength": 2,
+        "agility": 2,
+        "intelligence": 0
+    }
+}

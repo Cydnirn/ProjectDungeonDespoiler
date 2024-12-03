@@ -33,6 +33,10 @@ private:
         int_fast8_t y;
     } vec2i;
 
+    static void loadCreature();
+
+
+
 public:
     typedef struct
     {

@@ -6,9 +6,11 @@
 #include <curses.h>
 #include <unistd.h>
 #include <string>
-
+#include "../Creatures/CreatureLoader.h"
 
 namespace DespoilerEngine {
+    CreatureCollection LowCreatures;
+    CreatureCollection MediumCreatures;
     WINDOW* main_window;
     WINDOW* game_window;
     Game::rect game_area = {{0, 0}, {0, 0}};
@@ -28,8 +30,16 @@ namespace DespoilerEngine {
         nodelay(window, false);
     }
 
+    void Game::loadCreature()
+    {
+        LowCreatures.Creatures = CreatureLoader::loadCreatures("Creatures/Low");
+        MediumCreatures.Creatures = CreatureLoader::loadCreatures("Creatures/Medium");
+    }
+
+
     int Game::init()
     {
+        loadCreature();
         main_window = initscr();
         cbreak();
         noecho();

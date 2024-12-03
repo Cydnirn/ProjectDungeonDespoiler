@@ -5,7 +5,11 @@
 #include "Scene.h"
 #include <curses.h>
 
+#include "../Creatures/CreatureLoader.h"
+
 namespace DespoilerEngine
 {
+    CreatureLoader creatureLoader;
+    std::pmr::vector<Creature> creatures = CreatureLoader::loadCreatures();
 
 }
