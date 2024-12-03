@@ -5,7 +5,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include <cstdint>
-#include <ncursesw/ncurses.h>
+#include <curses.h>
 
 namespace DespoilerEngine {
 
