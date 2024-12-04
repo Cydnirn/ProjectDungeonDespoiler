@@ -38,7 +38,7 @@ private:
 
 
 public:
-    typedef struct
+    typedef struct rect
     {
         vec2i offset;
         vec2i bounds;
