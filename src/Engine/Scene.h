@@ -16,7 +16,8 @@ namespace DespoilerEngine
 class Scene {
 public:
   Scene(const char* p_title, int p_w, int p_h);
-  SDL_Texture* loadTexture(const char* p_filePath) const;
+  SDL_Texture *loadTexture(const char *p_filePath) const;
+  void loadIcon(const char *p_filePath) const;
   void cleanUp() const;
   void clear() const;
   void render(Entity& p_entity);

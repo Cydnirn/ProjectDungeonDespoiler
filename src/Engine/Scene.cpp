@@ -50,6 +50,14 @@ namespace DespoilerEngine
       return texture;
   }
 
+  void Scene::loadIcon(const char *p_filePath) const {
+    SDL_Surface* icon = nullptr;
+    icon = IMG_Load(p_filePath);
+    if (icon == nullptr) std::cout <<"Failed to load texture. Error: " << SDL_GetError() << std::endl;
+
+    SDL_SetWindowIcon(window, icon);
+  }
+
   void Scene::cleanUp() const {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

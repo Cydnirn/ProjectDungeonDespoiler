@@ -12,7 +12,7 @@
 namespace DespoilerEngine {
     constexpr int SCREEN_WIDTH=720;
     constexpr int SCREEN_HEIGHT=480;
-    Scene Window("DungeonDespoiler", SCREEN_WIDTH, SCREEN_HEIGHT);
+    Scene Window("Dungeon Despoiler", SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_Texture* BgTexture;
     CreatureCollection LowCreatures;
     CreatureCollection MediumCreatures;
@@ -34,6 +34,7 @@ namespace DespoilerEngine {
         if (!(TTF_Init()))
             std::cout << "TTF_init has failed. Error: " << SDL_GetError() << std::endl;
         loadCreature();
+        Window.loadIcon("resources/Textures/icon.jpeg");
         //MainWindow = SDL_CreateWindow("Dungeon Despoiler", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         BgTexture = Window.loadTexture("resources/Textures/background.png");
         return 0;
