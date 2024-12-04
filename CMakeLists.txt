@@ -4,6 +4,7 @@ project(ProjectDungeonDespoiler)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(pdcurses)
+find_package(SDL2)
 find_package(nlohmann_json)
 
 #include_directories(${PDCURSES_INCLUDE_DIR})
@@ -22,7 +23,7 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/CreatureLoader.cpp
 )
 
-target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json pdcurses::pdcurses)
+target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json pdcurses::pdcurses SDL2::SDL2main)
 add_custom_command(
         TARGET ProjectDungeonDespoiler POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
