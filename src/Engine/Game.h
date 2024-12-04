@@ -5,7 +5,6 @@
 #ifndef GAME_H
 #define GAME_H
 #include <cstdint>
-#include <curses.h>
 
 namespace DespoilerEngine {
 
@@ -13,12 +12,10 @@ class Game {
 
 public:
     static int init();
-    void run();
+    static void run();
     static void close();
 
 private:
-    static void drawBox(WINDOW* window, int pos_y = 0, int pos_x = 0, bool refresh = true);
-    static void enableKeyBlockInput(WINDOW* window);
 
 private:
     typedef struct

@@ -3,8 +3,10 @@ project(ProjectDungeonDespoiler)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(pdcurses)
 find_package(SDL2)
+find_package(SDL2_image)
+find_package(SDL2_ttf)
+find_package(OpenAL)
 find_package(nlohmann_json)
 
 #include_directories(${PDCURSES_INCLUDE_DIR})
@@ -21,9 +23,12 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/ScreenManager.cpp
         src/Engine/ScreenManager.h
         src/Engine/CreatureLoader.cpp
+        src/Engine/Entity.cpp
+        src/Engine/Entity.h
+        src/Engine/Math.h
 )
 
-target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json pdcurses::pdcurses SDL2::SDL2main)
+target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json OpenAL::OpenAL sdl_ttf::sdl_ttf SDL2_image::SDL2_image SDL2::SDL2main)
 add_custom_command(
         TARGET ProjectDungeonDespoiler POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -18,6 +18,15 @@
                 "CMAKE_POLICY_DEFAULT_CMP0091": "NEW",
                 "CMAKE_BUILD_TYPE": "Release"
             },
+            "environment": {
+                "ACLOCAL_PATH": "$penv{ACLOCAL_PATH}:/home/rei/.conan2/p/b/libto93bd03bccb121/p/res/aclocal",
+                "AUTOMAKE_CONAN_INCLUDES": "$penv{AUTOMAKE_CONAN_INCLUDES}:/home/rei/.conan2/p/b/libto93bd03bccb121/p/res/aclocal",
+                "AUTOCONF": "/home/rei/.conan2/p/autocf2af015330354/p/bin/autoconf",
+                "AUTORECONF": "/home/rei/.conan2/p/autocf2af015330354/p/bin/autoreconf",
+                "AUTOHEADER": "/home/rei/.conan2/p/autocf2af015330354/p/bin/autoheader",
+                "AUTOM4TE": "/home/rei/.conan2/p/autocf2af015330354/p/bin/autom4te",
+                "M4": "/home/rei/.conan2/p/m43fe61932e2887/p/bin/m4"
+            },
             "toolchainFile": "generators/conan_toolchain.cmake",
             "binaryDir": "/home/rei/Programming/CPP/ProjectDungeonDespoiler/build/Release"
         }
@@ -32,7 +41,15 @@
     "testPresets": [
         {
             "name": "conan-release",
-            "configurePreset": "conan-release"
+            "configurePreset": "conan-release",
+            "environment": {
+                "ACLOCAL_PATH": "$penv{ACLOCAL_PATH}:/home/rei/.conan2/p/b/libto93bd03bccb121/p/res/aclocal",
+                "AUTOMAKE_CONAN_INCLUDES": "$penv{AUTOMAKE_CONAN_INCLUDES}:/home/rei/.conan2/p/b/libto93bd03bccb121/p/res/aclocal",
+                "PATH": "/home/rei/.conan2/p/autom480a421c82a75/p/bin:/home/rei/.conan2/p/autocf2af015330354/p/bin:/home/rei/.conan2/p/m43fe61932e2887/p/bin:$penv{PATH}",
+                "M4": "/home/rei/.conan2/p/m43fe61932e2887/p/bin/m4",
+                "ALSA_CONFIG_DIR": "/home/rei/.conan2/p/b/libalf4fc4264c2585/p/res/alsa",
+                "OPENSSL_MODULES": "/home/rei/.conan2/p/b/opens536f29ab48795/p/lib/ossl-modules"
+            }
         }
     ]
 }
