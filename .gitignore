@@ -2,3 +2,5 @@ cmake-build-debug
 build-*
 bin*
 cmake-build-*
+.idea
+build
