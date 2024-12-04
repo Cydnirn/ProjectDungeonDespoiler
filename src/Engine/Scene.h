@@ -6,12 +6,14 @@
 #define SCENE_H
 #include "Game.h"
 
+#include <vector>
 
 namespace DespoilerEngine
 {
     class Scene : Game
     {
-
+        std::pmr::vector<WINDOW> Scenes;
+        
     };
 }
 

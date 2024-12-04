@@ -4,7 +4,8 @@
 
 #include "Game.h"
 #include <curses.h>
-#include <unistd.h>
+#include <chrono>
+#include <thread>
 #include <string>
 #include "CreatureLoader.h"
 
@@ -131,7 +132,7 @@ namespace DespoilerEngine {
             wrefresh(main_window);
             wrefresh(game_window);
             if (exit_req) break;
-            usleep(10000);
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
 
