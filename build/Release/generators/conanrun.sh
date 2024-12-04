@@ -1,1 +1,0 @@
-. "/home/rei/Programming/CPP/ProjectDungeonDespoiler/build/Release/generators/conanrunenv-release-x86_64.sh"
