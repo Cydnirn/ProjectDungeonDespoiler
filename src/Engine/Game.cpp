@@ -17,7 +17,6 @@ namespace DespoilerEngine {
     auto Screens = new ScreenLoader();
     CreatureCollection LowCreatures;
     CreatureCollection MediumCreatures;
-    int state = 0;
 
     void Game::loadCreature()
     {
@@ -51,12 +50,11 @@ namespace DespoilerEngine {
     void Game::run()
     {
         bool isRunning = true;
+        int state = 0;
         SDL_Event e;
         while (isRunning) {
             while (SDL_PollEvent(&e)) {
                 Screens->handleEvents(e, isRunning, state);
-                if (state == 0)
-                    Screens->runScreen(state);
             }
             // Clear the screen
             SDL_SetRenderDrawColor(renderer, 0,0,0, 255);
