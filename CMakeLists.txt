@@ -9,9 +9,6 @@ find_package(SDL2_ttf)
 find_package(OpenAL)
 find_package(nlohmann_json)
 
-#include_directories(${PDCURSES_INCLUDE_DIR})
-#include_directories(${nlohmann_json_INCLUDE_DIR})
-
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/DungeonDespoiler)
 add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Creature.cpp
@@ -27,6 +24,8 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Entity.h
         src/Engine/Math.h
         src/Engine/Screen.h
+        src/Engine/Screens/Map.cpp
+        src/Engine/Screens/Map.h
 )
 
 target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json OpenAL::OpenAL sdl_ttf::sdl_ttf SDL2_image::SDL2_image SDL2::SDL2main)
@@ -37,21 +36,3 @@ add_custom_command(
         $<TARGET_FILE_DIR:ProjectDungeonDespoiler>/resources
         USES_TERMINAL
 )
-
-# if (WIN32)
-#     set(CURSES_DLLS
-#             "${CMAKE_FIND_ROOT_PATH}/bin/libncursesw6.dll"
-#             "${CMAKE_FIND_ROOT_PATH}/bin/libformw6.dll"
-#             "${CMAKE_FIND_ROOT_PATH}/bin/libmenuw6.dll"
-#             "${CMAKE_FIND_ROOT_PATH}/bin/libpanelw6.dll"
-#     )
-#     add_custom_command(
-#             TARGET ProjectDungeonDespoiler POST_BUILD
-#             COMMAND ${CMAKE_COMMAND} -E copy
-#             $<TARGET_RUNTIME_DLLS:ProjectDungeonDespoiler>
-#             ${CURSES_DLLS}
-#             $<TARGET_FILE_DIR:ProjectDungeonDespoiler>
-#             USES_TERMINAL
-#             COMMAND_EXPAND_LISTS
-#     )
-# endif()

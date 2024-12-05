@@ -40,23 +40,17 @@ namespace DespoilerEngine
   }
 
   void Scene::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex) const {
-    while (SDL_PollEvent(&event))
-    {
       if (event.type == SDL_QUIT)
       {
         isRunning = false;
       }
-      if (event.type == SDL_KEYDOWN)
+      if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
       {
         switch (event.key.keysym.sym)
         {
-        case SDLK_q:
-          isRunning = false;
-          case SDLK_LEFT:
-            currentIndex--;
-            break;
-          case SDLK_RIGHT:
-            currentIndex++;
+          case SDLK_q:
+            isRunning = false;
+            std::cout << "Quitting" << std::endl;
             break;
           case SDLK_ESCAPE:
             isRunning = false;
@@ -65,7 +59,6 @@ namespace DespoilerEngine
             break;
         }
       }
-    }
   }
 
   void Scene::loadIcon(const char *p_filePath) const {
@@ -120,6 +113,14 @@ namespace DespoilerEngine
 
     SDL_RenderCopy(renderer, p_tex, &src, &dst);
   }
+
+  void Scene::render(TTF_Font* font, std::pmr::vector<TextDisplay> Texts) const {
+    for (const auto [text, x, y, color] : Texts) {
+      const SDL_Color textColor = color;
+      renderText(renderer, font, text, x, y, textColor);
+    }
+  }
+
 
   void Scene::render(float p_x, float p_y, const char *p_text, TTF_Font *font,
                      SDL_Color textColor) const {

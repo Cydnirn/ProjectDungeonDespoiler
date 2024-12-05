@@ -12,12 +12,14 @@
 namespace DespoilerEngine {
     int* Game::SCREEN_WIDTH = new int(720);
     int *Game::SCREEN_HEIGHT = new int(480);
-    auto Window = new Scene("Dungeon Despoiler", *Game::SCREEN_WIDTH, *Game::SCREEN_HEIGHT);
+    TTF_Font *font = nullptr;
+    auto Title = "Dungeon Despoiler";
+    auto Window = new Scene(Title, *Game::SCREEN_WIDTH, *Game::SCREEN_HEIGHT);
     auto Screens = new ScreenLoader();
     SDL_Texture* BgTexture;
     CreatureCollection LowCreatures;
     CreatureCollection MediumCreatures;
-    int state;
+    int state = 0;
 
     void Game::loadCreature()
     {
@@ -34,6 +36,12 @@ namespace DespoilerEngine {
             std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
         if (TTF_Init() < 0)
             std::cout << "TTF_init has failed. Error: " << SDL_GetError() << std::endl;
+        font = TTF_OpenFont("./resources/Fonts/arial.ttf", 24);
+        if (!font) {
+            std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+            Window->cleanUp();
+            return -1;
+        }
         loadCreature();
         Window->loadIcon("resources/Textures/icon.jpeg");
         BgTexture = Window->loadTexture("resources/Textures/background.png");
@@ -44,12 +52,14 @@ namespace DespoilerEngine {
     void Game::run()
     {
         SDL_Event e;
-        bool quit = false;
-        while( quit == false ) {
+        bool isRunning = true;
+        while( isRunning == true ) {
             while( SDL_PollEvent( &e ) ) {
-                if( e.type == SDL_QUIT ) quit = true;
+                Window->handleEvents(e, isRunning, state);
                 Window->clear();
                 Window->render(0,0, BgTexture);
+                Window->renderCenter(0, 0, Title, font, {255, 255, 255});
+                Window->renderCenter(0,25, "Press Q to quit", font, {255, 255, 255});
                 Window->display();
             }
         }
