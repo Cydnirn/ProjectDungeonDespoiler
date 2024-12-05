@@ -9,14 +9,12 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 
+#include "Screens/MainMenu.h"
+#include "Screens/Map.h"
+
 namespace DespoilerEngine {
-    int* Game::SCREEN_WIDTH = new int(720);
-    int *Game::SCREEN_HEIGHT = new int(480);
-    TTF_Font *font = nullptr;
-    auto Title = "Dungeon Despoiler";
-    auto Window = new Scene(Title, *Game::SCREEN_WIDTH, *Game::SCREEN_HEIGHT);
+    TTF_Font *Game::font = nullptr;
     auto Screens = new ScreenLoader();
-    SDL_Texture* BgTexture;
     CreatureCollection LowCreatures;
     CreatureCollection MediumCreatures;
     int state = 0;
@@ -39,35 +37,37 @@ namespace DespoilerEngine {
         font = TTF_OpenFont("./resources/Fonts/arial.ttf", 24);
         if (!font) {
             std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
-            Window->cleanUp();
             return -1;
         }
-        loadCreature();
-        Window->loadIcon("resources/Textures/icon.jpeg");
-        BgTexture = Window->loadTexture("resources/Textures/background.png");
-        Screens->addScreen(Window);
+        //loadCreature();
+        //main_menu_window->init();
+        //map_window->init();
+        Screens->addScreen(main_menu_window);
+        Screens->addScreen(map_window);
         return 0;
     }
 
     void Game::run()
     {
-        SDL_Event e;
         bool isRunning = true;
-        while( isRunning == true ) {
-            while( SDL_PollEvent( &e ) ) {
-                Window->handleEvents(e, isRunning, state);
-                Window->clear();
-                Window->render(0,0, BgTexture);
-                Window->renderCenter(0, 0, Title, font, {255, 255, 255});
-                Window->renderCenter(0,25, "Press Q to quit", font, {255, 255, 255});
-                Window->display();
+        SDL_Event e;
+        while (isRunning) {
+            while (SDL_PollEvent(&e)) {
+                Screens->handleEvents(e, isRunning, state);
+                if (state == 0)
+                    Screens->runScreen(state);
             }
+            SDL_RenderClear(renderer);
+            Screens->runScreen(state);
+            SDL_RenderPresent(renderer);
         }
     }
 
     void Game::close()
     {
-        Window->cleanUp();
+        Screens->clear();
+        TTF_Quit();
+        SDL_Quit();
     }
 
 } // DespoilerEngine

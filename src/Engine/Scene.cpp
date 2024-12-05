@@ -12,22 +12,15 @@
 
 namespace DespoilerEngine
 {
-  Scene::Scene(const char* p_title, const int p_w, const int p_h):window(nullptr), renderer(nullptr)
+  Scene::Scene(const char* p_title, const int p_w, const int p_h, bool newWin)
   {
-    window = SDL_CreateWindow(p_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, p_w, p_h, SDL_WINDOW_SHOWN);
-    if (window == nullptr)
-    {
-      std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-      return;
-    }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (renderer == nullptr)
-    {
-      std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-      return;
-    }
   }
+
+ Scene::Scene(const std::string &p_title, const int p_w, const int p_h) {
+
+  }
+
 
   SDL_Texture *Scene::loadTexture(const char *p_filePath) const {
       SDL_Texture* texture = nullptr;
@@ -39,45 +32,12 @@ namespace DespoilerEngine
       return texture;
   }
 
-  void Scene::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex) const {
-      if (event.type == SDL_QUIT)
-      {
-        isRunning = false;
-      }
-      if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
-      {
-        switch (event.key.keysym.sym)
-        {
-          case SDLK_q:
-            isRunning = false;
-            std::cout << "Quitting" << std::endl;
-            break;
-          case SDLK_ESCAPE:
-            isRunning = false;
-            break;
-          default:
-            break;
-        }
-      }
-  }
-
-  void Scene::loadIcon(const char *p_filePath) const {
+  void Scene::loadIcon(const char *p_filePath) {
     SDL_Surface* icon = nullptr;
     icon = IMG_Load(p_filePath);
     if (icon == nullptr) std::cout <<"Failed to load texture. Error: " << SDL_GetError() << std::endl;
 
-    SDL_SetWindowIcon(window, icon);
-  }
-
-  void Scene::cleanUp() const {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    TTF_Quit();
-    SDL_Quit();
-  }
-
-  void Scene::clear() const {
-    SDL_RenderClear(renderer);
+    SDL_SetWindowIcon(MainWindow, icon);
   }
 
   void Scene::render(Entity &p_entity) const {
@@ -103,7 +63,7 @@ namespace DespoilerEngine
     //src.w;
     //src.h;
 
-    SDL_QueryTexture(p_tex, NULL, NULL, &src.w, &src.h);
+    SDL_QueryTexture(p_tex, nullptr, nullptr, &src.w, &src.h);
 
     SDL_Rect dst;
     dst.x = x;
@@ -156,8 +116,8 @@ namespace DespoilerEngine
     src.h = surfaceMessage->h;
 
     SDL_Rect dst;
-    dst.x = *Game::SCREEN_WIDTH/2 - src.w/2 + p_x;
-    dst.y = *Game::SCREEN_HEIGHT/2 - src.h/2 + p_y;
+    dst.x = SCREEN_WIDTH/2 - src.w/2 + p_x;
+    dst.y = SCREEN_HEIGHT/2 - src.h/2 + p_y;
     dst.w = src.w;
     dst.h = src.h;
 

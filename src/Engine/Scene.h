@@ -13,25 +13,19 @@
 namespace DespoilerEngine
 {
 
-class Scene final : public Screen {
+class Scene : public Screen {
 public:
   ~Scene() override = default;
-  Scene(const char* p_title, int p_w, int p_h);
+  Scene(const char *p_title, int p_w, int p_h, bool newWindow = true);
+  Scene(const std::string &p_title, int p_w, int p_h);
   SDL_Texture *loadTexture(const char *p_filePath) const;
-  void handleEvents(SDL_Event &event, bool &isRunning,
-                    int &currentIndex) const override;
-  void loadIcon(const char *p_filePath) const;
-  void cleanUp() const;
-  void clear() const override;
+  static void loadIcon(const char *p_filePath);
   void render(Entity& p_entity) const;
   void render(int x, int y, SDL_Texture *p_tex) const override;
   void render(TTF_Font *font, std::pmr::vector<TextDisplay> Texts) const override;
   void render(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor) const;
   void renderCenter(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor) const;
   void display() const;
-private:
-  SDL_Window* window;
-  SDL_Renderer* renderer;
 };
 
 }

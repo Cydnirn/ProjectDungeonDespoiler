@@ -4,17 +4,23 @@
 
 #ifndef GAME_H
 #define GAME_H
+#include <SDL_ttf.h>
 #include <cstdint>
+#include <string>
 
 namespace DespoilerEngine {
+inline auto Title = new std::string("Dungeon Despoiler");
+inline int SCREEN_WIDTH = 720;
+inline int SCREEN_HEIGHT = 480;
+inline SDL_Window *MainWindow = SDL_CreateWindow(Title->c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);;
+inline SDL_Renderer* renderer = SDL_CreateRenderer(MainWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 class Game {
 public:
+    static TTF_Font *font;
     static int init();
     static void run();
     static void close();
-    static int* SCREEN_WIDTH;
-    static int* SCREEN_HEIGHT;
 
 private:
     typedef struct

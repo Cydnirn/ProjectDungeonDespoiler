@@ -24,6 +24,8 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Entity.h
         src/Engine/Math.h
         src/Engine/Screen.h
+        src/Engine/Screens/MainMenu.cpp
+        src/Engine/Screens/MainMenu.h
         src/Engine/Screens/Map.cpp
         src/Engine/Screens/Map.h
 )
