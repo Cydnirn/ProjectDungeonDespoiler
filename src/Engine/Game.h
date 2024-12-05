@@ -9,13 +9,12 @@
 namespace DespoilerEngine {
 
 class Game {
-
 public:
     static int init();
     static void run();
     static void close();
-
-private:
+    static int* SCREEN_WIDTH;
+    static int* SCREEN_HEIGHT;
 
 private:
     typedef struct

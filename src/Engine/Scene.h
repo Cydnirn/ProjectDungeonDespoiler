@@ -7,24 +7,27 @@
 
 #include <SDL_ttf.h>
 #include <SDL.h>
-#include <SDL_image.h>
+#include "Screen.h"
 #include "Entity.h"
-#include <vector>
 
 namespace DespoilerEngine
 {
-class Scene {
+
+class Scene final : public screen {
 public:
+  ~Scene() override = default;
   Scene(const char* p_title, int p_w, int p_h);
   SDL_Texture *loadTexture(const char *p_filePath) const;
+  void handleEvents(SDL_Event &event, bool &isRunning,
+                    int &currentIndex) const override;
   void loadIcon(const char *p_filePath) const;
   void cleanUp() const;
   void clear() const;
-  void render(Entity& p_entity);
-  void render(int x, int y, SDL_Texture* p_tex);
-  void render(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor);
-  void renderCenter(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor);
-  void display();
+  void render(Entity& p_entity) const;
+  void render(int x, int y, SDL_Texture* p_tex) const;
+  void render(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor) const;
+  void renderCenter(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor) const;
+  void display() const;
 private:
   SDL_Window* window;
   SDL_Renderer* renderer;

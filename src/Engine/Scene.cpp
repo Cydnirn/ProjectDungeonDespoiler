@@ -1,30 +1,19 @@
 //
 // Created by rei on 01.11.24.
 //
+#include "Scene.h"
+#include "Entity.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <iostream>
-#include "Entity.h"
-#include "Scene.h"
 
+#include "Game.h"
 
 namespace DespoilerEngine
 {
   Scene::Scene(const char* p_title, const int p_w, const int p_h):window(nullptr), renderer(nullptr)
   {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
-      std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-      return;
-    }
-
-    if (TTF_Init() != 0)
-    {
-      std::cerr << "TTF_Init Error: " << TTF_GetError() << std::endl;
-      return;
-    }
-
     window = SDL_CreateWindow(p_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, p_w, p_h, SDL_WINDOW_SHOWN);
     if (window == nullptr)
     {
@@ -50,6 +39,35 @@ namespace DespoilerEngine
       return texture;
   }
 
+  void Scene::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex) const {
+    while (SDL_PollEvent(&event))
+    {
+      if (event.type == SDL_QUIT)
+      {
+        isRunning = false;
+      }
+      if (event.type == SDL_KEYDOWN)
+      {
+        switch (event.key.keysym.sym)
+        {
+        case SDLK_q:
+          isRunning = false;
+          case SDLK_LEFT:
+            currentIndex--;
+            break;
+          case SDLK_RIGHT:
+            currentIndex++;
+            break;
+          case SDLK_ESCAPE:
+            isRunning = false;
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
   void Scene::loadIcon(const char *p_filePath) const {
     SDL_Surface* icon = nullptr;
     icon = IMG_Load(p_filePath);
@@ -69,7 +87,7 @@ namespace DespoilerEngine
     SDL_RenderClear(renderer);
   }
 
-  void Scene::render(Entity &p_entity) {
+  void Scene::render(Entity &p_entity) const {
     SDL_Rect src;
     src.x = p_entity.getCurrentFrame().x;
     src.y = p_entity.getCurrentFrame().y;
@@ -85,7 +103,7 @@ namespace DespoilerEngine
     SDL_RenderCopyEx(renderer, p_entity.getTex(), &src, &dst, p_entity.getAngle(), nullptr, SDL_FLIP_NONE);
   }
 
-  void Scene::render(int x, int y, SDL_Texture *p_tex) {
+  void Scene::render(int x, int y, SDL_Texture *p_tex) const {
     SDL_Rect src;
     src.x = 0;
     src. y = 0;
@@ -104,7 +122,7 @@ namespace DespoilerEngine
   }
 
   void Scene::render(float p_x, float p_y, const char *p_text, TTF_Font *font,
-                     SDL_Color textColor) {
+                     SDL_Color textColor) const {
     SDL_Surface* surfaceMessage = TTF_RenderText_Blended( font, p_text, textColor);
     SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
@@ -126,7 +144,7 @@ namespace DespoilerEngine
   }
 
   void Scene::renderCenter(float p_x, float p_y, const char *p_text,
-                           TTF_Font *font, SDL_Color textColor) {
+                           TTF_Font *font, SDL_Color textColor) const {
     SDL_Surface* surfaceMessage = TTF_RenderText_Blended( font, p_text, textColor);
     SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
@@ -137,8 +155,8 @@ namespace DespoilerEngine
     src.h = surfaceMessage->h;
 
     SDL_Rect dst;
-    dst.x = 720/2 - src.w/2 + p_x;
-    dst.y = 480/2 - src.h/2 + p_y;
+    dst.x = *Game::SCREEN_WIDTH/2 - src.w/2 + p_x;
+    dst.y = *Game::SCREEN_HEIGHT/2 - src.h/2 + p_y;
     dst.w = src.w;
     dst.h = src.h;
 
@@ -147,7 +165,7 @@ namespace DespoilerEngine
     SDL_DestroyTexture(message);
   }
 
-  void Scene::display() {
+  void Scene::display() const {
     SDL_RenderPresent(renderer);
   }
 

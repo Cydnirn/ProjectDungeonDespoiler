@@ -26,6 +26,7 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Entity.cpp
         src/Engine/Entity.h
         src/Engine/Math.h
+        src/Engine/Screen.h
 )
 
 target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json OpenAL::OpenAL sdl_ttf::sdl_ttf SDL2_image::SDL2_image SDL2::SDL2main)
