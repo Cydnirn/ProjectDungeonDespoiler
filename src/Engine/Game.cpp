@@ -34,14 +34,15 @@ namespace DespoilerEngine {
             std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
         if (TTF_Init() < 0)
             std::cout << "TTF_init has failed. Error: " << SDL_GetError() << std::endl;
+        if (!renderer)
+            std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
+        if (!MainWindow)
+            std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
         font = TTF_OpenFont("./resources/Fonts/arial.ttf", 24);
         if (!font) {
             std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
             return -1;
         }
-        //loadCreature();
-        //main_menu_window->init();
-        //map_window->init();
         Screens->addScreen(main_menu_window);
         Screens->addScreen(map_window);
         return 0;
@@ -57,8 +58,12 @@ namespace DespoilerEngine {
                 if (state == 0)
                     Screens->runScreen(state);
             }
+            // Clear the screen
+            SDL_SetRenderDrawColor(renderer, 0,0,0, 255);
             SDL_RenderClear(renderer);
+            // Render current screen
             Screens->runScreen(state);
+            // Present the updated screen
             SDL_RenderPresent(renderer);
         }
     }

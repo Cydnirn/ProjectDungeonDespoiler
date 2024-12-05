@@ -18,7 +18,7 @@ public:
   ~Scene() override = default;
   Scene(const char *p_title, int p_w, int p_h, bool newWindow = true);
   Scene(const std::string &p_title, int p_w, int p_h);
-  SDL_Texture *loadTexture(const char *p_filePath) const;
+  static SDL_Texture *loadTexture(const char *p_filePath);
   static void loadIcon(const char *p_filePath);
   void render(Entity& p_entity) const;
   void render(int x, int y, SDL_Texture *p_tex) const override;

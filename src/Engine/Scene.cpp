@@ -22,7 +22,7 @@ namespace DespoilerEngine
   }
 
 
-  SDL_Texture *Scene::loadTexture(const char *p_filePath) const {
+  SDL_Texture *Scene::loadTexture(const char *p_filePath) {
       SDL_Texture* texture = nullptr;
       texture = IMG_LoadTexture(renderer, p_filePath);
 
