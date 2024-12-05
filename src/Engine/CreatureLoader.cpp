@@ -1,7 +1,3 @@
-//
-// Created by rei on 12/3/24.
-//
-
 #include "CreatureLoader.h"
 #include <filesystem>
 #include <iostream>
@@ -40,9 +36,13 @@ namespace DespoilerEngine {
         std::mt19937 gen(rd());
         std::uniform_int_distribution<size_t> dist(0, collection.Creatures.size() - 1);
 
-        //Pick random Creature from collection
+        // Pick random Creature from collection
         size_t index = dist(gen);
         return collection.Creatures[index];
+    }
+
+    CreatureLoader::~CreatureLoader() {
+        // No need to manually clear as std::pmr::vector will handle its own cleanup
     }
 
 } // DespoilerEngine

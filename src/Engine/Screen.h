@@ -8,6 +8,7 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -37,31 +38,8 @@ public:
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     const SDL_Rect textRect = {x, y, surface->w, surface->h};
     SDL_RenderCopy(renderer, texture, nullptr, &textRect);
-  }
-};
-
-class ScreenLoader {
-public:
-  std::vector<Screen*> screens;
-  void addScreen(Screen *p_screen) {
-    screens.push_back(p_screen);
-  }
-  void removeScreen(Screen *p_screen) {
-    std::erase(screens, p_screen);
-  }
-  void runScreen(int index) const {
-    screens[index]->init();
-    screens[index]->run(index);
-  }
-  void handleEvents(SDL_Event &e, bool &isRunning, int &currentIndex) const {
-    screens[currentIndex]->handleEvents(e, isRunning, currentIndex);
-  }
-  void clear() {
-    for( Screen *screen: screens){
-      removeScreen(screen);
-    }
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(MainWindow);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
   }
 };
 }

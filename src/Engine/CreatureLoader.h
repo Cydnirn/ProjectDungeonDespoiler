@@ -1,6 +1,7 @@
 //
 // Created by rei on 12/3/24.
 //
+#pragma once
 
 #include <vector>
 
@@ -15,7 +16,9 @@ namespace DespoilerEngine {
     class CreatureLoader {
     public:
         static std::pmr::vector<Creature> loadCreatures(const std::string& directory = ".");
-        static Creature spawnRandomCreature(const CreatureCollection& collection);
+        static Creature
+        spawnRandomCreature(const CreatureCollection &collection);
+        ~CreatureLoader();
     };
 } // DespoilerEngine
 #endif //CREATURELOADER_H

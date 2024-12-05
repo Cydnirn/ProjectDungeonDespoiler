@@ -5,22 +5,20 @@
 #include "Map.h"
 
 namespace DespoilerEngine {
-  Map::Map(const char *p_title, int p_w, int p_h)
-    : Scene(p_title, p_w, p_h, false), BgTextureMain(nullptr) {}
-  Map::Map(const std::string &p_title, int p_w, int p_h)
-       : Scene(p_title.c_str(), p_w, p_h, false), BgTextureMain(nullptr) {}
+  Map::Map()
+    : BgTextureMain(nullptr) {}
 
   void Map::init() {
-        map_window->loadIcon("./resources/Textures/icon.jpeg");
-        BgTextureMain = map_window->loadTexture("./resources/Textures/background.png");
+        loadIcon("./resources/Textures/icon.ico");
+        BgTextureMain = loadTexture("./resources/Textures/background.png");
   }
 
 void Map::run(int &state) const {
-  map_window->clear();
-  map_window->render(0, 0, BgTextureMain);
-  map_window->renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});
-  map_window->renderCenter(0, 25, "This is a map", Game::font, {255, 255, 255});
-  map_window->display();
+  this->clear();
+  this->render(0, 0, BgTextureMain);
+  renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});
+  renderCenter(0, 25, "This is a map", Game::font, {255, 255, 255});
+  display();
 }
 
 void Map::handleEvents(SDL_Event &event, bool &isRunning,
@@ -34,11 +32,12 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
       switch (event.key.keysym.sym)
       {
       case SDLK_q:
-        isRunning = false;
-        std::cout << "Quitting" << std::endl;
-        break;
       case SDLK_ESCAPE:
         isRunning = false;
+        break;
+      case SDLK_BACKSPACE:
+        currentIndex -= 1;
+        this->clear();
         break;
       default:
         break;
@@ -46,12 +45,16 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
     }
   }
 
-  void Map::clear() const {
-    SDL_RenderClear(renderer);
+  void Map::cleanUp() const {
+    if (BgTextureMain) {
+      SDL_DestroyTexture(BgTextureMain);
+      BgTextureMain = nullptr;
+    }
+    SDL_DestroyRenderer(renderer.get());
   }
 
-  void Map::cleanUp() const {
-    SDL_DestroyRenderer(renderer);
+  Map::~Map() {
+    cleanUp();
   }
 
 

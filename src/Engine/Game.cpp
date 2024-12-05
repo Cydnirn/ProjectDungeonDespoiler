@@ -5,8 +5,11 @@
 #include "Game.h"
 #include "CreatureLoader.h"
 #include "Scene.h"
+#include "ScreenManager.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <memory>
 #include <string>
 
 #include "Screens/MainMenu.h"
@@ -14,9 +17,11 @@
 
 namespace DespoilerEngine {
     TTF_Font *Game::font = nullptr;
-    auto Screens = new ScreenLoader();
+    auto Screens =  std::make_shared<ScreenManager>();
     CreatureCollection LowCreatures;
     CreatureCollection MediumCreatures;
+    Game::Game(){};
+    Game::~Game(){};
 
     void Game::loadCreature()
     {
@@ -58,9 +63,12 @@ namespace DespoilerEngine {
         // Load the font from the specified path and size
         font = TTF_OpenFont("./resources/Fonts/arial.ttf", 24);
         if (!font) {
-            std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
-            return -1;
+          std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+          return -1;
         }
+
+        const auto main_menu_window = std::make_shared<MainMenu>();
+        const auto map_window = std::make_shared<Map>();
 
         // Add screens to the screen loader
         Screens->addScreen(main_menu_window);
@@ -84,19 +92,24 @@ namespace DespoilerEngine {
                 Screens->handleEvents(e, isRunning, state);
             }
             // Clear the screen with a black color
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            SDL_RenderClear(renderer);
+            SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
+            SDL_RenderClear(renderer.get());
             // Render the current screen based on the state
             Screens->runScreen(state);
             // Present the updated screen
-            SDL_RenderPresent(renderer);
+            SDL_RenderPresent(renderer.get());
         }
     }
 
     void Game::close()
     {
         Screens->clear();
+        if (font) {
+            TTF_CloseFont(font);
+            font = nullptr;
+        }
         TTF_Quit();
+        IMG_Quit();
         SDL_Quit();
     }
 
