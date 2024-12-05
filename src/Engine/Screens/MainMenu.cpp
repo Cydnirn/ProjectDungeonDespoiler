@@ -50,8 +50,6 @@ void MainMenu::handleEvents(SDL_Event &event, bool &isRunning,
         case SDLK_KP_ENTER:
         std::cout << currentIndex << std::endl;
         currentIndex += 1;
-        clear();
-
         break;
       default:
         break;
