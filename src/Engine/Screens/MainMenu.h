@@ -12,7 +12,8 @@ namespace DespoilerEngine {
 class MainMenu final : public Scene {
 public:
   ~MainMenu() override;
-  MainMenu();
+  MainMenu(SDL_Window *p_window, SDL_Renderer *p_renderer, const int *p_width,
+           const int *p_height);
   void init() override;
   void run(int &state) const override;
   void cleanUp() const override;

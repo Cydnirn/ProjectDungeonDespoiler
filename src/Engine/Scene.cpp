@@ -8,17 +8,15 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
-#include "Game.h"
-
 namespace DespoilerEngine
 {
-  Scene::Scene()
-  = default;
+  Scene::Scene(SDL_Window *p_window, SDL_Renderer *p_renderer, const int *p_width,
+             const int *p_height)
+    : Screen(p_window, p_renderer,p_width,p_height) {}
 
-
-  SDL_Texture *Scene::loadTexture(const char *p_filePath) {
+SDL_Texture *Scene::loadTexture(const char *p_filePath) const {
       SDL_Texture* texture = nullptr;
-      texture = IMG_LoadTexture(renderer.get(), p_filePath);
+      texture = IMG_LoadTexture(this->s_renderer, p_filePath);
 
       if (texture == nullptr)
         std::cout << "Failed to load texture. Error: " << SDL_GetError() << std::endl;
@@ -26,15 +24,16 @@ namespace DespoilerEngine
       return texture;
   }
 
-  void Scene::loadIcon(const char *p_filePath) {
+  void Scene::loadIcon(const char *p_filePath) const {
     SDL_Surface* icon = nullptr;
     icon = IMG_Load(p_filePath);
     if (icon == nullptr) std::cout <<"Failed to load texture. Error: " << SDL_GetError() << std::endl;
 
-    SDL_SetWindowIcon(MainWindow.get(), icon);
+    SDL_SetWindowIcon(this->s_window, icon);
+    SDL_FreeSurface(icon);
   }
 
-  void Scene::render(Entity &p_entity) {
+  void Scene::render(Entity &p_entity) const {
     SDL_Rect src;
     src.x = p_entity.getCurrentFrame().x;
     src.y = p_entity.getCurrentFrame().y;
@@ -47,7 +46,7 @@ namespace DespoilerEngine
     dst.w = p_entity.getCurrentFrame().w*p_entity.getScale().x;
     dst.h = p_entity.getCurrentFrame().h*p_entity.getScale().y;
 
-    SDL_RenderCopyEx(renderer.get(), p_entity.getTex(), &src, &dst, p_entity.getAngle(), nullptr, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(this->s_renderer, p_entity.getTex(), &src, &dst, p_entity.getAngle(), nullptr, SDL_FLIP_NONE);
   }
 
   void Scene::render(int x, int y, SDL_Texture *p_tex) const {
@@ -69,25 +68,25 @@ namespace DespoilerEngine
     dst.w = src.w;
     dst.h = src.h;
 
-    SDL_RenderCopy(renderer.get(), p_tex, &src, &dst);
+    SDL_RenderCopy(this->s_renderer, p_tex, &src, &dst);
   }
 
   void Scene::render(TTF_Font* font, std::pmr::vector<TextDisplay> Texts) const {
     for (const auto [text, x, y, color] : Texts) {
       const SDL_Color textColor = color;
-      renderText(renderer.get(), font, text, x, y, textColor);
+      renderText(this->s_renderer, font, text, x, y, textColor);
     }
   }
 
 
   void Scene::render(const float p_x, const float p_y, const char *p_text, TTF_Font *font,
-                     const SDL_Color textColor) {
+                     const SDL_Color textColor) const {
     SDL_Surface* surfaceMessage = TTF_RenderText_Blended( font, p_text, textColor);
     if (!surfaceMessage) {
       std::cerr << "Failed to render text: " << TTF_GetError() << std::endl;
       return;
     }
-    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer.get(), surfaceMessage);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(this->s_renderer, surfaceMessage);
     if (!message) {
       std::cerr << "Failed to create texture from surface: " << SDL_GetError() << std::endl;
       SDL_FreeSurface(surfaceMessage);
@@ -102,24 +101,24 @@ namespace DespoilerEngine
     src.h = surfaceMessage->h;
 
     SDL_Rect dst;
-    dst.x = p_x;
-    dst.y = p_y;
+    dst.x = static_cast<int>(p_x);
+    dst.y = static_cast<int>(p_y);
     dst.w = src.w;
     dst.h = src.h;
 
-    SDL_RenderCopy(renderer.get(), message, &src, &dst);
+    SDL_RenderCopy(this->s_renderer, message, &src, &dst);
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(message);
   }
 
   void Scene::renderCenter(const float p_x, const float p_y, const char *p_text,
-                           TTF_Font *font, const SDL_Color textColor) {
+                           TTF_Font *font, const SDL_Color textColor) const {
     SDL_Surface* surfaceMessage = TTF_RenderText_Solid( font, p_text, textColor);
     if (!surfaceMessage) {
       std::cerr << "Failed to render text: " << TTF_GetError() << std::endl;
       return;
     }
-    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer.get(), surfaceMessage);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(this->s_renderer, surfaceMessage);
     if (!message) {
       std::cerr << "Failed to create texture from surface: " << SDL_GetError() << std::endl;
       SDL_FreeSurface(surfaceMessage);
@@ -133,24 +132,24 @@ namespace DespoilerEngine
     src.h = surfaceMessage->h;
 
     SDL_Rect dst;
-    dst.x = SCREEN_WIDTH/2 - src.w/2 + p_x;
-    dst.y = SCREEN_HEIGHT/2 - src.h/2 + p_y;
+    dst.x = *this->SCREEN_WIDTH / 2 - src.w/2 + p_x;
+    dst.y = *this->SCREEN_HEIGHT/2 - src.h/2 + p_y;
     dst.w = src.w;
     dst.h = src.h;
 
-    SDL_RenderCopy(renderer.get(), message, &src, &dst);
+    SDL_RenderCopy(this->s_renderer, message, &src, &dst);
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(message);
   }
 
   void Scene::clear() const {
-    SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
-    SDL_RenderClear(renderer.get());
+    SDL_SetRenderDrawColor(this->s_renderer, 0, 0, 0, 255);
+    SDL_RenderClear(this->s_renderer);
   }
 
 
-  void Scene::display() {
-    SDL_RenderPresent(renderer.get());
+  void Scene::display() const {
+    SDL_RenderPresent(this->s_renderer);
   }
 
 }

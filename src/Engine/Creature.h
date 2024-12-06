@@ -22,7 +22,7 @@ private:
 
 public:
     Creature() = default;
-    Creature(std::string  name, const std::string& desc, Stats  stats);
+    Creature(std::string  name, std::string  desc, Stats  stats);
 
     // Load a creature from a JSON file
     static Creature fromJsonFile(const std::string& filepath);

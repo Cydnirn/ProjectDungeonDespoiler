@@ -3,26 +3,24 @@
 //
 
 #include "MainMenu.h"
-#include "../Game.h"
 
 namespace DespoilerEngine {
-SDL_Texture *BgTextureMain;
- MainMenu::MainMenu()
-    : BgTextureMain(nullptr) {}
+ MainMenu::MainMenu(SDL_Window* p_window, SDL_Renderer* p_renderer, const int * p_width, const int * p_height)
+  : Scene(p_window, p_renderer, p_width, p_height), BgTextureMain(nullptr) {}
 
- void MainMenu::init() {
+void MainMenu::init() {
    loadIcon("./resources/Textures/icon.ico");
    BgTextureMain = loadTexture("./resources/Textures/background.png");
  }
 
 
 void MainMenu::run(int &state) const {
-       clear();
-       this->render(0, 0, BgTextureMain);
-       renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});
-       renderCenter(0, 25, "Press Enter to start", Game::font, {255, 255, 255});
-       renderCenter(0, 75, "Press Q to quit", Game::font, {255, 255, 255});
-       display();
+   clear();
+   this->render(0, 0, BgTextureMain);
+   this->renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});
+   this->renderCenter(0, 25, "Press Enter to start", Game::font, {255, 255, 255});
+   this->renderCenter(0, 75, "Press Q to quit", Game::font, {255, 255, 255});
+   display();
  }
 
 
@@ -55,7 +53,7 @@ void MainMenu::cleanUp() const {
      SDL_DestroyTexture(BgTextureMain);
      BgTextureMain = nullptr;
    }
-   SDL_DestroyRenderer(renderer.get());
+   SDL_DestroyRenderer(this->s_renderer);
  }
 
 MainMenu::~MainMenu() {cleanUp();}

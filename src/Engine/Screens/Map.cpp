@@ -5,8 +5,9 @@
 #include "Map.h"
 
 namespace DespoilerEngine {
-  Map::Map()
-    : BgTextureMain(nullptr) {}
+  Map::Map(SDL_Window *p_window, SDL_Renderer *p_renderer, const int *p_width,
+           const int *p_height)
+      : Scene(p_window, p_renderer, p_width, p_height), BgTextureMain(nullptr) {}
 
   void Map::init() {
         loadIcon("./resources/Textures/icon.ico");
@@ -50,7 +51,7 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
       SDL_DestroyTexture(BgTextureMain);
       BgTextureMain = nullptr;
     }
-    SDL_DestroyRenderer(renderer.get());
+    SDL_DestroyRenderer(this->s_renderer);
   }
 
   Map::~Map() {

@@ -10,18 +10,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <memory>
-#include <string>
 
 #include "Screens/MainMenu.h"
 #include "Screens/Map.h"
 
 namespace DespoilerEngine {
     TTF_Font *Game::font = nullptr;
-    auto Screens =  std::make_shared<ScreenManager>();
     CreatureCollection LowCreatures;
     CreatureCollection MediumCreatures;
-    Game::Game(){};
-    Game::~Game(){};
+    Game::Game() = default;
+    auto Screens =  std::make_unique<ScreenManager>();
 
     void Game::loadCreature()
     {
@@ -37,6 +35,11 @@ namespace DespoilerEngine {
      */
     int Game::init()
     {
+        this->SCREEN_WIDTH=720;
+        this->SCREEN_HEIGHT = 480;
+        this->fps=30;
+        this->desiredDelta = 1000 / this->fps;
+        const auto Title = "Dungeon Despoiler";
         // Initialize SDL with all subsystems
         SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -52,8 +55,11 @@ namespace DespoilerEngine {
         if (TTF_Init() < 0)
             std::cout << "TTF_init has failed. Error: " << SDL_GetError() << std::endl;
 
+        this->MainWindow = SDL_CreateWindow(Title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH, this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        this->s_renderer = SDL_CreateRenderer(this->MainWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
         // Check if the renderer is created successfully
-        if (!renderer)
+        if (!s_renderer)
             std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
 
         // Check if the main window is created successfully
@@ -67,8 +73,8 @@ namespace DespoilerEngine {
           return -1;
         }
 
-        const auto main_menu_window = std::make_shared<MainMenu>();
-        const auto map_window = std::make_shared<Map>();
+        const auto main_menu_window = std::make_shared<MainMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
+        const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
 
         // Add screens to the screen loader
         Screens->addScreen(main_menu_window);
@@ -80,30 +86,40 @@ namespace DespoilerEngine {
     /**
      * Runs the main game loop, handling events, updating the screen, and rendering the current screen.
      */
-    void Game::run()
+    void Game::run() const
     {
         bool isRunning = true;  // Flag to control the game loop
         int state = 0;          // Variable to track the current state of the game
         SDL_Event e;            // SDL event structure to handle events
 
         while (isRunning) {
+            Uint32 frameStart = SDL_GetTicks();
+            //Clear screen with black color
+            SDL_SetRenderDrawColor(this->s_renderer, 0, 0, 0, 255);
+            SDL_RenderClear(this->s_renderer);
             // Poll for events and handle them
             while (SDL_PollEvent(&e)) {
                 Screens->handleEvents(e, isRunning, state);
             }
-            // Clear the screen with a black color
-            SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
-            SDL_RenderClear(renderer.get());
             // Render the current screen based on the state
             Screens->runScreen(state);
             // Present the updated screen
-            SDL_RenderPresent(renderer.get());
+            SDL_RenderPresent(this->s_renderer);
+            Uint32 delta = SDL_GetTicks() - frameStart;
+            Uint32 avgFps = 1000 / (this->desiredDelta - delta);
+            if(delta < this->desiredDelta)
+            {
+                SDL_Delay(this->desiredDelta - delta);
+            }
+            std::cout << avgFps << std::endl;
         }
     }
 
-    void Game::close()
+    void Game::close() const
     {
         Screens->clear();
+        SDL_DestroyRenderer(this->s_renderer);
+        SDL_DestroyWindow(this->MainWindow);
         if (font) {
             TTF_CloseFont(font);
             font = nullptr;
