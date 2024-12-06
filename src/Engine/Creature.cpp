@@ -14,6 +14,10 @@ namespace DespoilerEngine {
     Creature::Creature(std::string  name, std::string  desc, const Stats  stats)
     : name(std::move(name)), description(std::move(desc)), stats(stats) {}
 
+    Creature::~Creature() {
+        printf("Creature is destroyed");
+    }
+
     Creature Creature::fromJsonFile(const std::string& filepath) {
         std::ifstream file(filepath);
         if (!file.is_open()) {

@@ -41,8 +41,6 @@ namespace DespoilerEngine {
         return collection.Creatures[index];
     }
 
-    CreatureLoader::~CreatureLoader() {
-        // No need to manually clear as std::pmr::vector will handle its own cleanup
-    }
+    CreatureLoader::~CreatureLoader() =default;
 
 } // DespoilerEngine

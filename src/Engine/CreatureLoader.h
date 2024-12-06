@@ -19,6 +19,7 @@ namespace DespoilerEngine {
         static Creature
         spawnRandomCreature(const CreatureCollection &collection);
         ~CreatureLoader();
+        CreatureLoader() = default;
     };
 } // DespoilerEngine
 #endif //CREATURELOADER_H
