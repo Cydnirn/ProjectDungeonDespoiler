@@ -3,33 +3,23 @@
 //
 
 #include "Game.h"
-#include <curses.h>
-#include <chrono>
-#include <thread>
-#include <string>
 #include "CreatureLoader.h"
+#include "ScreenManager.h"
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <memory>
+
+#include "Screens/MainMenu.h"
+#include "Screens/Map.h"
+#include <iostream>
 
 namespace DespoilerEngine {
+    TTF_Font *Game::font = nullptr;
     CreatureCollection LowCreatures;
     CreatureCollection MediumCreatures;
-    WINDOW* main_window;
-    WINDOW* game_window;
-    Game::rect game_area = {{0, 0}, {0, 0}};
-    Game::rect screen_area = {{0, 0}, {0, 0}};
-
-    void Game::drawBox(WINDOW* window, int pos_y, int pos_x, bool refresh)
-    {
-        if(refresh) werase(main_window);
-        wattron(window, A_BOLD);
-        box(window, pos_y, pos_x);
-        wattroff(window, A_BOLD);
-    }
-
-    void Game::enableKeyBlockInput(WINDOW* window)
-    {
-        keypad(window, true);
-        nodelay(window, false);
-    }
+    Game::Game() = default;
+    auto Screens =  std::make_unique<ScreenManager>();
 
     void Game::loadCreature()
     {
@@ -37,108 +27,149 @@ namespace DespoilerEngine {
         MediumCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/medium");
     }
 
-
+    /**
+     * Initializes the game by setting up SDL, SDL_image, and SDL_ttf libraries,
+     * and loading the necessary resources such as fonts and screens.
+     *
+     * @return int Returns 0 on success, -1 on failure.
+     */
     int Game::init()
     {
-        loadCreature();
-        main_window = initscr();
-        cbreak();
-        noecho();
-        clear();
-        refresh();
-        resize_term(0,0);;
-        PDC_set_title("Dungeon Despoiler");
-        curs_set(0); // Make cursor invisible
-        if(!has_colors())
-        {
-            endwin();
-            printf("Error: Terminal does not support color.\n");
-            exit(1);
+        this->SCREEN_WIDTH=720;
+        this->SCREEN_HEIGHT = 480;
+        this->fps=30;
+        this->desiredDelta = 1000 / this->fps;
+        const auto Title = "Dungeon Despoiler";
+        // Initialize SDL with all subsystems
+        SDL_Init(SDL_INIT_EVERYTHING);
+
+        // Initialize SDL video subsystem and check for errors
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+          std::cout << "HEY.. SDL_Init HAS FAILED. SDL_ERROR: " << SDL_GetError() << std::endl;
+          return -1;
+        }
+        // Initialize SDL_image with PNG support and check for errors
+        if (!(IMG_Init(IMG_INIT_PNG))) {
+          std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
+          return -1;
         }
 
-        start_color();
-        init_pair(1, COLOR_RED, COLOR_BLACK);
+        // Initialize SDL_ttf and check for errors
+        if (TTF_Init() < 0) {
+          std::cout << "TTF_init has failed. Error: " << SDL_GetError() << std::endl;
+          return -1;
+        }
 
-        constexpr int_fast8_t screen_width = 80;
-        constexpr int_fast8_t screen_height = 24;
-        constexpr int infopanel = 4;
+        this->MainWindow = SDL_CreateWindow(Title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH, this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        this->s_renderer = SDL_CreateRenderer(this->MainWindow, -1, SDL_RENDERER_ACCELERATED );
 
-        screen_area = {{0, 0}, {screen_width, screen_height}};
-        game_area = {{0, 0}, {static_cast<int_fast8_t>(screen_area.width() - 2), static_cast<int_fast8_t>(screen_area.height() - infopanel - 4)}};
-        game_window = newwin(static_cast<int>(screen_area.height() - infopanel - 2), static_cast<int>(screen_area.width() - 2),
-                             static_cast<int>(screen_area.top() + 1), static_cast<int>(screen_area.left() + 1));
-        main_window = newwin(static_cast<int>(screen_area.height()), static_cast<int>(screen_area.width()), 0, 0);
+        // Check if the renderer is created successfully
+        if (!s_renderer) {
+          std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
+          return -1;
+        }
 
-        enableKeyBlockInput(game_window);
-        enableKeyBlockInput(main_window);
+        // Check if the main window is created successfully
+        if (!MainWindow) {
+          std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
+          return -1;
+        }
+
+        // Load the font from the specified path and size
+        font = TTF_OpenFont("./resources/Fonts/upheavtt.ttf", 24);
+        if (!font) {
+          std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+          return -1;
+        }
+
+        const auto main_menu_window = std::make_shared<MainMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
+        const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
+
+        // Add screens to the screen loader
+        Screens->addScreen(main_menu_window);
+        Screens->addScreen(map_window);
 
         return 0;
     }
 
-    void Game::run()
+    bool Game::checkCollision(std::vector<SDL_Rect>& a, std::vector<SDL_Rect>&b){
+        int leftA, leftB;
+        int rightA, rightB;
+        int topA, topB;
+        int bottomA, bottomB;
+
+        for(auto & ABox : a){
+          leftA = ABox.x;
+          rightA = ABox.x + ABox.w;
+          topA = ABox.y;
+          bottomA = ABox.y + ABox.h;
+        }
+
+        for(auto & BBox : b){
+          leftB = BBox.x;
+          rightB = BBox.x + BBox.w;
+          topB = BBox.y;
+          bottomB = BBox.y + BBox.h;
+
+          if(bottomA <= topB) return false;
+          if(topA >= bottomB) return false;
+          if(rightA <= leftB) return false;
+          if(leftA >= rightB) return false;
+          return true;
+        }
+        return false;
+    }
+
+    /**
+     * Runs the main game loop, handling events, updating the screen, and rendering the current screen.
+     */
+    void Game::run() const
     {
-        player.display_char = '0';
-        player.position = {1, 1};
-        /* Main game loop */
-        bool exit_req = false;
-        drawBox(main_window, 0, 0, false);
-        wmove(main_window, static_cast<int>(game_area.bottom() + 3), 1);
-        whline(main_window, '-', static_cast<int>(screen_area.width() - 2));
-
-        wrefresh(main_window);
-        wattron(game_window, COLOR_PAIR(1));
-        mvwaddch(game_window, 9, 9, '!');
-        wattroff(game_window, COLOR_PAIR(1));
-        mvwaddch(game_window, player.position.y, player.position.x, player.display_char);
-        wrefresh(game_window);
-
-        while(true)
-        {
-            werase(game_window);
-
-            mvwaddch(game_window, player.position.y, player.position.x, ' ');
-            switch (tolower(wgetch(main_window)))
-            {
-                case 'q':
-                    exit_req = true;
-                    break;
-                case KEY_UP:
-                case 'w':
-                    if(player.position.y > game_area.top())
-                        player.position.y -= 1;
-                    break;
-                case KEY_DOWN:
-                case 's':
-                    if(player.position.y < game_area.bottom())
-                        player.position.y += 1;
-                    break;
-                case KEY_LEFT:
-                case 'a':
-                    if(player.position.x > game_area.left() + 1)
-                        player.position.x -= 1;
-                    break;
-                case KEY_RIGHT:
-                case 'd':
-                    if(player.position.x < game_area.right() - 2)
-                        player.position.x += 1;
-                    break;
-                default:
-                    break;
+        bool isRunning = true;  // Flag to control the game loop
+        int state = 0;          // Variable to track the current state of the game
+        int prevState = 0;  // Variable to track the previous state of the game
+        SDL_Event e;            // SDL event structure to handle events
+        Screens->initializeScreen(state);
+        while (isRunning) {
+            Uint32 frameStart = SDL_GetTicks();
+            //Clear screen with black color
+            SDL_SetRenderDrawColor(this->s_renderer, 0, 0, 0, 255);
+            SDL_RenderClear(this->s_renderer);
+            // Poll for events and handle them
+            while (SDL_PollEvent(&e)) {
+                Screens->handleEvents(e, isRunning, state);
             }
-
-            wattron(game_window, A_BOLD);
-            mvwaddch(game_window, player.position.y, player.position.x, player.display_char);
-            wattroff(game_window, A_BOLD);
-            wrefresh(main_window);
-            wrefresh(game_window);
-            if (exit_req) break;
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            if(state != prevState)
+            {
+              Screens->initializeScreen(state);
+              prevState = state;
+            }
+            // Render the current screen based on the state
+            Screens->runScreen(state);
+            // Present the updated screen
+            SDL_RenderPresent(this->s_renderer);
+            Uint32 frameTime = SDL_GetTicks() - frameStart;
+            Uint32 avgFps = (this-> desiredDelta > frameTime) ? 1000 / (this->desiredDelta - frameTime): 0;
+            if(frameTime < this->desiredDelta)
+            {
+                SDL_Delay(this->desiredDelta - frameTime);
+            }
+            std::cout << avgFps << std::endl;
         }
     }
 
-    void Game::close()
+    void Game::close() const
     {
-        endwin();
+        Screens->clear();
+        SDL_DestroyRenderer(this->s_renderer);
+        SDL_DestroyWindow(this->MainWindow);
+        if (font) {
+            TTF_CloseFont(font);
+            font = nullptr;
+        }
+        TTF_Quit();
+        IMG_Quit();
+        SDL_Quit();
     }
 
 } // DespoilerEngine

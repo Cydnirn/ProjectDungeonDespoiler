@@ -4,21 +4,28 @@
 
 #ifndef GAME_H
 #define GAME_H
+#include <SDL_ttf.h>
 #include <cstdint>
-#include <curses.h>
+#include <vector>
 
 namespace DespoilerEngine {
-
 class Game {
-
 public:
-    static int init();
-    void run();
-    static void close();
-
-private:
-    static void drawBox(WINDOW* window, int pos_y = 0, int pos_x = 0, bool refresh = true);
-    static void enableKeyBlockInput(WINDOW* window);
+    Game();
+    ~Game() {
+        printf("Game is destroyed");
+    };
+    SDL_Window* MainWindow{};
+    SDL_Renderer* s_renderer{};
+    int SCREEN_WIDTH{};
+    int SCREEN_HEIGHT{};
+    int fps{};
+    int desiredDelta{}; //Desired time b/w frames
+    static TTF_Font *font;
+    int init();
+    void run() const;
+    void close() const;
+    static bool checkCollision(std::vector<SDL_Rect>& a, std::vector<SDL_Rect>&b);
 
 private:
     typedef struct
@@ -27,15 +34,12 @@ private:
         uint_fast8_t y;
     } vec2ui;
 
-    typedef struct
-    {
-        int_fast8_t x;
-        int_fast8_t y;
+    typedef struct {
+      int_fast8_t x;
+      int_fast8_t y;
     } vec2i;
 
     static void loadCreature();
-
-
 
 public:
     typedef struct rect
@@ -54,13 +58,6 @@ public:
             (a.y >= offset.y && a.y < bottom());}
     } rect;
 
-private:
-    struct
-    {
-        vec2i position;
-        rect bounds;
-        char display_char;
-    } player = {};
 };
 
 } // ProjectDungeonDespoiler

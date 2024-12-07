@@ -2,6 +2,8 @@
 # To keep your changes, remove these comment lines, but the plugin won't be able to modify your requirements
 
 requirements:
-  - "sdl/2.30.9"
-  - "pdcurses/3.9"
+  - "openal-soft/1.23.1"
+  - "sdl/2.28.3"
+  - "sdl_ttf/2.22.0"
+  - "sdl_image/2.6.3"
   - "nlohmann_json/3.11.3"
