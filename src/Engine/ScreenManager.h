@@ -16,6 +16,7 @@ public:
   template <typename T>
   void addScreen(T* p_screen);
   [[maybe_unused]] void removeScreen(Scene *p_screen);
+  void initializeScreen(int index)const;
   void runScreen(int index) const;
   void handleEvents(SDL_Event &e, bool &isRunning, int &currentIndex) const;
   void clear();

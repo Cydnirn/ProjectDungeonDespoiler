@@ -4,7 +4,6 @@
 
 #include "Game.h"
 #include "CreatureLoader.h"
-#include "Scene.h"
 #include "ScreenManager.h"
 
 #include <SDL2/SDL.h>
@@ -13,6 +12,7 @@
 
 #include "Screens/MainMenu.h"
 #include "Screens/Map.h"
+#include <iostream>
 
 namespace DespoilerEngine {
     TTF_Font *Game::font = nullptr;
@@ -44,30 +44,39 @@ namespace DespoilerEngine {
         SDL_Init(SDL_INIT_EVERYTHING);
 
         // Initialize SDL video subsystem and check for errors
-        if (SDL_Init(SDL_INIT_VIDEO) < 0)
-            std::cout << "HEY.. SDL_Init HAS FAILED. SDL_ERROR: " << SDL_GetError() << std::endl;
-
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+          std::cout << "HEY.. SDL_Init HAS FAILED. SDL_ERROR: " << SDL_GetError() << std::endl;
+          return -1;
+        }
         // Initialize SDL_image with PNG support and check for errors
-        if (!(IMG_Init(IMG_INIT_PNG)))
-            std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
+        if (!(IMG_Init(IMG_INIT_PNG))) {
+          std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
+          return -1;
+        }
 
         // Initialize SDL_ttf and check for errors
-        if (TTF_Init() < 0)
-            std::cout << "TTF_init has failed. Error: " << SDL_GetError() << std::endl;
+        if (TTF_Init() < 0) {
+          std::cout << "TTF_init has failed. Error: " << SDL_GetError() << std::endl;
+          return -1;
+        }
 
         this->MainWindow = SDL_CreateWindow(Title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH, this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-        this->s_renderer = SDL_CreateRenderer(this->MainWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        this->s_renderer = SDL_CreateRenderer(this->MainWindow, -1, SDL_RENDERER_ACCELERATED );
 
         // Check if the renderer is created successfully
-        if (!s_renderer)
-            std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
+        if (!s_renderer) {
+          std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
+          return -1;
+        }
 
         // Check if the main window is created successfully
-        if (!MainWindow)
-            std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
+        if (!MainWindow) {
+          std::cout << "Renderer failed. Error: " << SDL_GetError() << std::endl;
+          return -1;
+        }
 
         // Load the font from the specified path and size
-        font = TTF_OpenFont("./resources/Fonts/arial.ttf", 24);
+        font = TTF_OpenFont("./resources/Fonts/upheavtt.ttf", 24);
         if (!font) {
           std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
           return -1;
@@ -83,6 +92,34 @@ namespace DespoilerEngine {
         return 0;
     }
 
+    bool Game::checkCollision(std::vector<SDL_Rect>& a, std::vector<SDL_Rect>&b){
+        int leftA, leftB;
+        int rightA, rightB;
+        int topA, topB;
+        int bottomA, bottomB;
+
+        for(auto & ABox : a){
+          leftA = ABox.x;
+          rightA = ABox.x + ABox.w;
+          topA = ABox.y;
+          bottomA = ABox.y + ABox.h;
+        }
+
+        for(auto & BBox : b){
+          leftB = BBox.x;
+          rightB = BBox.x + BBox.w;
+          topB = BBox.y;
+          bottomB = BBox.y + BBox.h;
+
+          if(bottomA <= topB) return false;
+          if(topA >= bottomB) return false;
+          if(rightA <= leftB) return false;
+          if(leftA >= rightB) return false;
+          return true;
+        }
+        return false;
+    }
+
     /**
      * Runs the main game loop, handling events, updating the screen, and rendering the current screen.
      */
@@ -90,8 +127,9 @@ namespace DespoilerEngine {
     {
         bool isRunning = true;  // Flag to control the game loop
         int state = 0;          // Variable to track the current state of the game
+        int prevState = state;  // Variable to track the previous state of the game
         SDL_Event e;            // SDL event structure to handle events
-
+        Screens->initializeScreen(state);
         while (isRunning) {
             Uint32 frameStart = SDL_GetTicks();
             //Clear screen with black color
@@ -101,15 +139,20 @@ namespace DespoilerEngine {
             while (SDL_PollEvent(&e)) {
                 Screens->handleEvents(e, isRunning, state);
             }
+            if(state != prevState)
+            {
+              Screens->initializeScreen(state);
+              prevState = state;
+            }
             // Render the current screen based on the state
             Screens->runScreen(state);
             // Present the updated screen
             SDL_RenderPresent(this->s_renderer);
-            Uint32 delta = SDL_GetTicks() - frameStart;
-            Uint32 avgFps = 1000 / (this->desiredDelta - delta);
-            if(delta < this->desiredDelta)
+            Uint32 frameTime = SDL_GetTicks() - frameStart;
+            Uint32 avgFps = (this-> desiredDelta > frameTime) ? 1000 / (this->desiredDelta - frameTime): 0;
+            if(frameTime < this->desiredDelta)
             {
-                SDL_Delay(this->desiredDelta - delta);
+                SDL_Delay(this->desiredDelta - frameTime);
             }
             std::cout << avgFps << std::endl;
         }

@@ -56,7 +56,8 @@ void MainMenu::cleanUp() const {
    SDL_DestroyRenderer(this->s_renderer);
  }
 
-MainMenu::~MainMenu() {cleanUp();}
+MainMenu::~MainMenu() {
+   printf("MainMenu is destroyed");cleanUp();}
 
 
 

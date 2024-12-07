@@ -2,7 +2,6 @@
 // Created by rei on 01.11.24.
 //
 #include "Scene.h"
-#include "Entity.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -19,7 +18,7 @@ SDL_Texture *Scene::loadTexture(const char *p_filePath) const {
       texture = IMG_LoadTexture(this->s_renderer, p_filePath);
 
       if (texture == nullptr)
-        std::cout << "Failed to load texture. Error: " << SDL_GetError() << std::endl;
+        std::cerr << "Failed to load texture. Error: " << SDL_GetError() << std::endl;
 
       return texture;
   }
@@ -33,21 +32,10 @@ SDL_Texture *Scene::loadTexture(const char *p_filePath) const {
     SDL_FreeSurface(icon);
   }
 
-  void Scene::render(Entity &p_entity) const {
-    SDL_Rect src;
-    src.x = p_entity.getCurrentFrame().x;
-    src.y = p_entity.getCurrentFrame().y;
-    src.w = p_entity.getCurrentFrame().w;
-    src.h = p_entity.getCurrentFrame().h;
-
-    SDL_Rect dst;
-    dst.x = p_entity.getPos().x + (p_entity.getCurrentFrame().w - p_entity.getCurrentFrame().w*p_entity.getScale().x)/2;
-    dst.y = p_entity.getPos().y + (p_entity.getCurrentFrame().h - p_entity.getCurrentFrame().h*p_entity.getScale().y)/2;
-    dst.w = p_entity.getCurrentFrame().w*p_entity.getScale().x;
-    dst.h = p_entity.getCurrentFrame().h*p_entity.getScale().y;
-
-    SDL_RenderCopyEx(this->s_renderer, p_entity.getTex(), &src, &dst, p_entity.getAngle(), nullptr, SDL_FLIP_NONE);
+  void Scene::render(Entity &entity) const {
+    SDL_RenderCopy(this->s_renderer, entity.e_texture, &entity.e_src, &entity.e_dst);
   }
+  
 
   void Scene::render(int x, int y, SDL_Texture *p_tex) const {
     static int tex_w = 0;

@@ -6,6 +6,7 @@
 #define GAME_H
 #include <SDL_ttf.h>
 #include <cstdint>
+#include <vector>
 
 namespace DespoilerEngine {
 class Game {
@@ -24,6 +25,7 @@ public:
     int init();
     void run() const;
     void close() const;
+    static bool checkCollision(std::vector<SDL_Rect>& a, std::vector<SDL_Rect>&b);
 
 private:
     typedef struct
@@ -56,13 +58,6 @@ public:
             (a.y >= offset.y && a.y < bottom());}
     } rect;
 
-private:
-    struct
-    {
-        vec2i position;
-        rect bounds;
-        char display_char;
-    } player = {};
 };
 
 } // ProjectDungeonDespoiler

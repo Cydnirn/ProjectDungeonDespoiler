@@ -4,8 +4,10 @@
 
 #ifndef MAP_H
 #define MAP_H
-#include "../Scene.h"
 #include "../Game.h"
+#include "../Player.h"
+#include "../Scene.h"
+#include <memory>
 
 namespace DespoilerEngine {
 
@@ -22,6 +24,7 @@ public:
 
 private:
   mutable SDL_Texture *BgTextureMain;
+  std::unique_ptr<Player> player;
 };
 
 } // DespoilerEngine

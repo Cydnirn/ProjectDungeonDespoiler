@@ -29,8 +29,11 @@ template <typename T>
     return screen.get() == p_screen;
   });
   }
-void ScreenManager::runScreen(int index) const {
+
+  void ScreenManager::initializeScreen(int index) const {
     screens[index]->init();
+  }
+void ScreenManager::runScreen(int index) const {
     screens[index]->run(index);
   }
 void ScreenManager::handleEvents(SDL_Event &e, bool &isRunning, int &currentIndex) const {

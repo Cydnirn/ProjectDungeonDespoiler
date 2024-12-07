@@ -19,8 +19,6 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Scene.h
         src/Engine/ScreenManager.cpp
         src/Engine/CreatureLoader.cpp
-        src/Engine/Entity.cpp
-        src/Engine/Entity.h
         src/Engine/Math.h
         src/Engine/Screen.h
         src/Engine/Screens/MainMenu.cpp
@@ -28,6 +26,9 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Screens/Map.cpp
         src/Engine/Screens/Map.h
         src/Engine/ScreenManager.h
+        src/Engine/Player.cpp
+        src/Engine/Player.h
+        src/Engine/Entity.h
 )
 
 target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json OpenAL::OpenAL sdl_ttf::sdl_ttf SDL2_image::SDL2_image SDL2::SDL2main)
