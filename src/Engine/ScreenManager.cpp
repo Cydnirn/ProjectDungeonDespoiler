@@ -13,11 +13,9 @@ namespace DespoilerEngine {
     clear();
   }
 
-  [[maybe_unused]] void ScreenManager::addScreen(const std::shared_ptr<Scene>& Screen) {
+void ScreenManager::addScreen(const std::shared_ptr<Scene>& Screen) {
     screens.emplace_back(Screen);
   }
-
-
 
 template <typename T>
   void ScreenManager::addScreen(T *p_screen) {

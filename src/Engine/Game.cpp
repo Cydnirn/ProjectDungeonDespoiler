@@ -127,7 +127,7 @@ namespace DespoilerEngine {
     {
         bool isRunning = true;  // Flag to control the game loop
         int state = 0;          // Variable to track the current state of the game
-        int prevState = state;  // Variable to track the previous state of the game
+        int prevState = 0;  // Variable to track the previous state of the game
         SDL_Event e;            // SDL event structure to handle events
         Screens->initializeScreen(state);
         while (isRunning) {

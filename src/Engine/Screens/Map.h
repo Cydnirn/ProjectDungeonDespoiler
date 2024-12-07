@@ -24,6 +24,8 @@ public:
 
 private:
   mutable SDL_Texture *BgTextureMain;
+  mutable SDL_Texture *p_texture{};
+  mutable SDL_Surface *p_img{};
   std::unique_ptr<Player> player;
 };
 

@@ -7,7 +7,7 @@
 #include <iostream>
 
 namespace DespoilerEngine {
-  Player::Player(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst, SDL_Renderer *p_renderer): Entity(texture, src, dst), pRenderer(p_renderer) {
+  Player::Player(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst): Entity(texture, src, dst) {
     this->e_texture = texture;
     this->e_src = src;
     this->e_dst = dst;
@@ -15,25 +15,23 @@ namespace DespoilerEngine {
 
   void Player::handleEvent(SDL_Event &e) {
     // If a key was pressed
-    if (e.type == SDL_KEYDOWN) {
-        switch (e.key.keysym.sym) {
-            case SDLK_UP:
-            case SDLK_w:
-              e_dst.y -= p_vel;
-              break;
-            case SDLK_DOWN:
-            case SDLK_s:
-              e_dst.y += p_vel;
-              break;
-            case SDLK_LEFT:
-            case SDLK_a:
-              e_dst.x -= p_vel;
-              break;
-            case SDLK_RIGHT:
-            case SDLK_d:
-              e_dst.x += p_vel;
-              break;
-        }
+    auto state = SDL_GetKeyboardState(nullptr);
+    moveUp = (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]) > 0;
+    moveDown = (state[SDL_SCANCODE_DOWN] || state[SDL_SCANCODE_S]) > 0;
+    moveLeft = (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A]) > 0;
+    moveRight = (state[SDL_SCANCODE_RIGHT] || state[SDL_SCANCODE_D]) > 0;
+
+    if(moveUp){
+        e_dst.y -= p_vel;
+    }
+    if(moveDown){
+      e_dst.y += p_vel;
+    }
+    if(moveLeft){
+      e_dst.x -= p_vel;
+    }
+    if(moveRight){
+      e_dst.x += p_vel;
     }
   }
 

@@ -11,22 +11,22 @@
 namespace DespoilerEngine {
   Map::Map(SDL_Window *p_window, SDL_Renderer *p_renderer, const int *p_width,
            const int *p_height)
-      : Scene(p_window, p_renderer, p_width, p_height), BgTextureMain(nullptr) {}
+      : Scene(p_window, p_renderer, p_width, p_height), BgTextureMain(nullptr), p_texture(nullptr), p_img(nullptr) {}
 
   void Map::init() {
-    SDL_Surface* p_img = IMG_Load("./resources/Textures/Player.png");
+    p_img = IMG_Load("./resources/Textures/Player_idle.png");
     if (p_img == nullptr) {
       std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
       return;
     }
-    SDL_Texture* p_texture = SDL_CreateTextureFromSurface(this->s_renderer, p_img);
+    p_texture = SDL_CreateTextureFromSurface(this->s_renderer, p_img);
     if(p_texture == nullptr){
         std::cerr << "Failed to create texture from surface: " << SDL_GetError() << std::endl;
         return;
     }
     int dst_x = *this->SCREEN_WIDTH / 2 - Player::p_Width / 2;
     int dst_y = *this->SCREEN_HEIGHT / 2 - Player::p_Height / 2;
-    player = std::make_unique<Player>(p_texture, SDL_Rect{0, 0, Player::p_Width, Player::p_Height}, SDL_Rect{dst_x, dst_y, Player::p_Width, Player::p_Height}, this->s_renderer);
+    player = std::make_unique<Player>(p_texture, SDL_Rect{0, 0, Player::p_Width, Player::p_Height}, SDL_Rect{dst_x, dst_y, Player::p_Width, Player::p_Height});
     loadIcon("./resources/Textures/icon.ico");
     BgTextureMain = loadTexture("./resources/Textures/background.png");
     }
@@ -69,11 +69,14 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
       SDL_DestroyTexture(BgTextureMain);
       BgTextureMain = nullptr;
     }
+    if(player){
+      SDL_DestroyTexture(p_texture);
+      SDL_FreeSurface(p_img);
+    }
     SDL_DestroyRenderer(this->s_renderer);
   }
 
   Map::~Map() {
-    printf("Map is destroyed");
     cleanUp();
   }
 
