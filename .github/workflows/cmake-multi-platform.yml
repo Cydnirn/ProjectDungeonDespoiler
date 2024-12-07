@@ -58,7 +58,7 @@ jobs:
       uses: turtlebrowser/get-conan@main
 
     - name: Generate Conan Profile
-      run: conan profile new default --detect
+      run: conan profile detect --force
 
     - name: Install dependencies
       run: conan install . --build=missing
