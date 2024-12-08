@@ -5,8 +5,6 @@
 #include "Map.h"
 #include <SDL_image.h>
 #include "memory"
-#include <iostream>
-#include "../Player.h"
 
 namespace DespoilerEngine {
   Map::Map(SDL_Window *p_window, SDL_Renderer *p_renderer, const int *p_width,
