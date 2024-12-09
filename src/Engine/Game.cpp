@@ -82,8 +82,23 @@ namespace DespoilerEngine {
           return -1;
         }
 
+        //Load Player to map
+        auto p_img = IMG_Load("./resources/Textures/Player_idle.png");
+        if (p_img == nullptr) {
+          std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
+          return -1;
+        }
+        auto p_texture = SDL_CreateTextureFromSurface(this->s_renderer, p_img);
+        if(p_texture == nullptr){
+            std::cerr << "Failed to create texture from surface: " << SDL_GetError() << std::endl;
+            return -1;
+        }
+        int dst_x = this->SCREEN_WIDTH / 2 - Player::p_Width / 2;
+        int dst_y = this->SCREEN_HEIGHT / 2 - Player::p_Height / 2;
+        const auto player = std::make_shared<Player>(p_texture, SDL_Rect{0, 0, Player::p_Width, Player::p_Height}, SDL_Rect{dst_x, dst_y, Player::p_Width, Player::p_Height});
+
         const auto main_menu_window = std::make_shared<MainMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
-        const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
+        const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, std::move(player));
 
         // Add screens to the screen loader
         Screens->addScreen(main_menu_window);

@@ -5,28 +5,13 @@
 #include "Map.h"
 #include <SDL_image.h>
 #include "memory"
-#include <iostream>
-#include "../Player.h"
 
 namespace DespoilerEngine {
   Map::Map(SDL_Window *p_window, SDL_Renderer *p_renderer, const int *p_width,
-           const int *p_height)
-      : Scene(p_window, p_renderer, p_width, p_height), BgTextureMain(nullptr), p_texture(nullptr), p_img(nullptr) {}
+           const int *p_height, std::shared_ptr<Player> player)
+      : Scene(p_window, p_renderer, p_width, p_height), BgTextureMain(nullptr), p_texture(nullptr), p_img(nullptr), player(player) {}
 
   void Map::init() {
-    p_img = IMG_Load("./resources/Textures/Player_idle.png");
-    if (p_img == nullptr) {
-      std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
-      return;
-    }
-    p_texture = SDL_CreateTextureFromSurface(this->s_renderer, p_img);
-    if(p_texture == nullptr){
-        std::cerr << "Failed to create texture from surface: " << SDL_GetError() << std::endl;
-        return;
-    }
-    int dst_x = *this->SCREEN_WIDTH / 2 - Player::p_Width / 2;
-    int dst_y = *this->SCREEN_HEIGHT / 2 - Player::p_Height / 2;
-    player = std::make_unique<Player>(p_texture, SDL_Rect{0, 0, Player::p_Width, Player::p_Height}, SDL_Rect{dst_x, dst_y, Player::p_Width, Player::p_Height});
     loadIcon("./resources/Textures/icon.ico");
     BgTextureMain = loadTexture("./resources/Textures/background.png");
     }
@@ -34,8 +19,9 @@ namespace DespoilerEngine {
 void Map::run(int &state) const {
   this->clear();
   this->render(0, 0, BgTextureMain);
+  this->renderScaled(50, 50, p_texture, 100, 100);
   this->renderCenter(0, -210, "Dungeon Despoiler", Game::font, {255, 255, 255});
-  this->render(*player);
+  this->render(player);
   display();
 }
 
