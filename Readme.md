@@ -33,6 +33,5 @@ conan install . --build=missing -c tools.system.package_manager:mode=install -c 
 
 3. Build Project
 ```bash
-cmake . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=/path/to/conan/build/Release/generators/conan_toolchain.cmake
- 
+cmake . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES="conan_provider.cmake"
 ```
