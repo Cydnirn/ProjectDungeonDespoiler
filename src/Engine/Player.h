@@ -13,8 +13,8 @@ namespace DespoilerEngine {
 class Player final : public Entity {
 public:
   Player(SDL_Texture* texture, SDL_Rect src, SDL_Rect dst);
-  static const int p_Width = 25;
-  static const int p_Height = 25;
+  static const int p_Width = 50;
+  static const int p_Height = 50;
 
 
   // Velocity of the player
