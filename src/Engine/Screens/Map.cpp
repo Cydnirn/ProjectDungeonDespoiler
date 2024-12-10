@@ -30,7 +30,7 @@ namespace DespoilerEngine {
 void Map::run(int &state) const {
   clear();
   this->render(0, 0, BgTextureMain);
-  this->renderScaled(1, 1, WallTexture, 50, 50);
+  this->renderScaled(20, 20, WallTexture, 25, 25);
   this->renderScaled(50, 50, p_texture, 250, 250);
   this->renderCenter(0, -210, "Dungeon Despoiler", Game::font, {255, 255, 255});
   this->render(player);
