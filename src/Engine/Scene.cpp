@@ -32,15 +32,18 @@ SDL_Texture *Scene::loadTexture(const char *p_filePath) const {
     SDL_FreeSurface(icon);
   }
 
-  //void Scene::render(Entity *entity) const {
-  //  SDL_RenderCopy(this->s_renderer, entity->e_texture, &entity->e_src, &entity->e_dst);
-  //}
+  void Scene::render(Entity *entity) const {
+    SDL_RenderCopy(this->s_renderer, entity->e_texture, &entity->e_src, &entity->e_dst);
+  }
 
   void Scene::render(std::shared_ptr<Entity> entity) const {
     SDL_RenderCopy(this->s_renderer, entity->e_texture, &entity->e_src, &entity->e_dst);
   }
 
   void Scene::renderScaled(int x, int y, SDL_Texture *p_tex, int w, int h) const {
+        if(p_tex == nullptr){
+          return;
+        }
         SDL_Rect src;
         src.x = 0;
         src.y = 0;

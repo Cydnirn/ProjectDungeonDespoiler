@@ -21,7 +21,7 @@ public:
   SDL_Texture *loadTexture(const char *p_filePath) const;
   void loadIcon(const char *p_filePath) const;
   void clear() const override;
-  //void render(Entity *entity) const;
+  void render(Entity *entity) const;
   void render(std::shared_ptr<Entity> entity) const;
   void render(int x, int y, SDL_Texture *p_tex) const override;
   void render(TTF_Font *font, std::pmr::vector<TextDisplay> Texts) const override;

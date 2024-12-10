@@ -1,9 +1,7 @@
 #include "CreatureLoader.h"
 #include <filesystem>
 #include <iostream>
-#include <random>
-
-#include "../Engine/Creature.h"
+#include "RandomGenerator.h"
 
 namespace DespoilerEngine {
 
@@ -32,12 +30,9 @@ namespace DespoilerEngine {
         {
             throw std::runtime_error("No creatures loaded.");
         }
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<size_t> dist(0, collection.Creatures.size() - 1);
 
         // Pick random Creature from collection
-        const size_t index = dist(gen);
+        const size_t index = RandomGenerator::generateRandomNumber(0, collection.Creatures.size() - 1);
         return collection.Creatures[index];
     }
 

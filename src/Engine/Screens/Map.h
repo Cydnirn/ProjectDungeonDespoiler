@@ -26,6 +26,8 @@ private:
   mutable SDL_Texture *BgTextureMain;
   mutable SDL_Texture *p_texture{};
   mutable SDL_Surface *p_img{};
+  mutable SDL_Texture *WallTexture{};
+  SDL_Rect WallRect{};
   std::shared_ptr<Player> player;
 };
 

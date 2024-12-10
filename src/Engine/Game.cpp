@@ -10,6 +10,7 @@
 #include <SDL2/SDL_image.h>
 #include <memory>
 
+#include "Screens/Battle.h"
 #include "Screens/MainMenu.h"
 #include "Screens/Map.h"
 #include <iostream>
@@ -17,14 +18,12 @@
 namespace DespoilerEngine {
     TTF_Font *Game::font = nullptr;
     CreatureCollection LowCreatures;
-    CreatureCollection MediumCreatures;
     Game::Game() = default;
     auto Screens =  std::make_unique<ScreenManager>();
 
     void Game::loadCreature()
     {
         LowCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/low");
-        MediumCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/medium");
     }
 
     /**
@@ -98,11 +97,13 @@ namespace DespoilerEngine {
         const auto player = std::make_shared<Player>(p_texture, SDL_Rect{0, 0, Player::p_Width, Player::p_Height}, SDL_Rect{dst_x, dst_y, Player::p_Width, Player::p_Height});
 
         const auto main_menu_window = std::make_shared<MainMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
-        const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, std::move(player));
+        const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, player);
+        //const auto battle_window = std::make_shared<BattleScene>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
 
         // Add screens to the screen loader
         Screens->addScreen(main_menu_window);
         Screens->addScreen(map_window);
+        //Screens->addScreen(battle_window);
 
         return 0;
     }
@@ -169,7 +170,7 @@ namespace DespoilerEngine {
             {
                 SDL_Delay(this->desiredDelta - frameTime);
             }
-            std::cout << avgFps << std::endl;
+            //std::cout << avgFps << std::endl;
         }
     }
 

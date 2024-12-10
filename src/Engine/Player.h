@@ -6,8 +6,11 @@
 #define PROJECTDUNGEONDESPOILER_PLAYER_H
 
 #include "Entity.h"
+#include "Inventory.h"
+#include "Stats.h"
 #include <SDL.h>
 #include <vector>
+
 namespace DespoilerEngine {
 
 class Player final : public Entity {
@@ -18,7 +21,7 @@ public:
 
 
   // Velocity of the player
-  static const int p_vel = 5;
+  static const int p_vel = 10;
 
   void handleEvent(SDL_Event &e) override;
   [[maybe_unused]] std::vector<SDL_Rect>& getColliders();
@@ -28,6 +31,11 @@ private:
   bool moveRight = false;
   bool moveUp = false;
   bool moveDown = false;
+
+  Stats stats{10, 10, 10, 10};
+  Inventory p_inventory;
+  int health = 10 * stats.vigor;
+
 
   std::vector<SDL_Rect> pColliders;
 
