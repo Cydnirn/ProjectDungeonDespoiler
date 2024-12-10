@@ -3,22 +3,18 @@
 
 #include <cstdint>
 #include <string>
+#include "Stats.h"
 
 namespace DespoilerEngine {
 
 class Creature {
-    struct Stats {
-        uint8_t vigor;
-        uint8_t strength;
-        uint8_t agility;
-        uint8_t intelligence;
-    };
+
 
 private:
     std::string description;
     std::string name;
-    Stats stats{};
-    int health = 10;
+    Stats stats{0,0,0,0};
+    int health = 10 * stats.vigor;
 
 public:
     Creature() = default;
@@ -33,7 +29,7 @@ public:
 
     // Getters
     [[nodiscard]] const std::string& getName() const;
-    [[nodiscard]] const Stats& getStats() const;
+    [[nodiscard]] const Stats &getStats() const;
     [[nodiscard]] const int* getHealth() const;
 };
 

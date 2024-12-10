@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <nlohmann/json.hpp>
 #include <utility>
+#include "Stats.h"
 
 using json = nlohmann::json;
 
@@ -57,7 +58,7 @@ namespace DespoilerEngine {
         return name;
     }
 
-    const Creature::Stats& Creature::getStats() const {
+    const Stats& Creature::getStats() const {
         return stats;
     }
 
