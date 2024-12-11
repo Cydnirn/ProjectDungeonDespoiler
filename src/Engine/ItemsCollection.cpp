@@ -27,16 +27,17 @@ namespace DespoilerEngine {
   void ItemsCollection::addCollection(const DespoilerEngine::Items& item, const std::string& title) {
     items.insert({title, item});
   }
+
   Items ItemsCollection::fromJsonFile(const std::string &filepath) {
     std::ifstream file(filepath);
     if(!file.is_open()) throw std::runtime_error("Could not open file: " + filepath);
     json j;
     file >> j;
     Stats stats = {
-                j["baseRequirements"]["vigor"].get<uint8_t>(),
-                j["baseRequirements"]["strength"].get<uint8_t>(),
-                j["baseRequirements"]["agility"].get<uint8_t>(),
-                j["baseRequirements"]["intelligence"].get<uint8_t>()
+                j["baseRequirements"]["vigor"].get<int>(),
+                j["baseRequirements"]["strength"].get<int>(),
+                j["baseRequirements"]["agility"].get<int>(),
+                j["baseRequirements"]["intelligence"].get<int>()
     };
     return Items({j["name"].get<std::string>(), stats, j["base"].get<int>(), j["type"].get<ItemType>()});
   }
