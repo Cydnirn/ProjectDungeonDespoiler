@@ -11,6 +11,7 @@ namespace DespoilerEngine {
     this->e_texture = texture;
     this->e_src = src;
     this->e_dst = dst;
+    this->inventory->addItem("Sword", Game::ItemsCol->getItem("Sword"));
   }
 
   void Player::handleEvent(SDL_Event &e) {
