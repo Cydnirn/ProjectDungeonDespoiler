@@ -10,6 +10,7 @@
 #include "Stats.h"
 #include <SDL.h>
 #include <vector>
+#include <memory>
 
 namespace DespoilerEngine {
 
@@ -25,6 +26,7 @@ public:
 
   void handleEvent(SDL_Event &e) override;
   [[maybe_unused]] std::vector<SDL_Rect>& getColliders();
+  std::shared_ptr<Items> Weapon;
 
 private:
   bool moveLeft = false;
@@ -33,7 +35,7 @@ private:
   bool moveDown = false;
 
   Stats stats{10, 10, 10, 10};
-  Inventory p_inventory;
+  Inventory p_inventory = Inventory();
   int health = 10 * stats.vigor;
 
 

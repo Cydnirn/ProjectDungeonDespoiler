@@ -39,24 +39,8 @@ private:
       int_fast8_t y;
     } vec2i;
 
-    static void loadCreature();
+    static void loadEssentials();
 
-public:
-    typedef struct rect
-    {
-        vec2i offset;
-        vec2i bounds;
-        [[nodiscard]] uint_fast16_t top() const {return  offset.y;}
-        [[nodiscard]] uint_fast16_t bottom() const {return offset.y + bounds.y;}
-        [[nodiscard]] uint_fast16_t left() const {return offset.x;}
-        [[nodiscard]] uint_fast16_t right() const {return offset.x + bounds.x;}
-
-        [[nodiscard]] uint_fast16_t width() const {return bounds.x;}
-        [[nodiscard]] uint_fast16_t height() const {return bounds.y;}
-
-        [[nodiscard]] bool contains (const vec2i a) const{return (a.x >= offset.x && a.x < right()) &&
-            (a.y >= offset.y && a.y < bottom());}
-    } rect;
 
 };
 

@@ -33,13 +33,14 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Inventory.h
         src/Engine/Items.h
         src/Engine/Stats.h
-        src/Engine/Items/Sword.cpp
         src/Engine/RandomGenerator.cpp
         src/Engine/RandomGenerator.h
         src/Engine/Screens/Battle.cpp
         src/Engine/Screens/Battle.h
         src/Engine/BattleMaster.cpp
         src/Engine/BattleMaster.h
+        src/Engine/ItemsCollection.cpp
+        src/Engine/ItemsCollection.h
 )
 
 target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json OpenAL::OpenAL sdl_ttf::sdl_ttf SDL2_image::SDL2_image SDL2::SDL2main)
