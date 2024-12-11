@@ -8,12 +8,10 @@
 #include "Creature.h"
 
 namespace DespoilerEngine {
-  BattleMaster::BattleMaster(std::vector<Creature> creatures, std::shared_ptr<Player> player){
-    this->CreatureParticipant = creatures;
-    this->PlayerParticipant = std::move(player);
-  }
+  BattleMaster::BattleMaster(std::vector<Creature> creatures, std::shared_ptr<Player> player):
+  CreatureParticipant(creatures), PlayerParticipant(std::move(player)){}
 
-  void BattleMaster::startBattle() {
+  void BattleMaster::init() {
     printf("Battle has started");
   }
 
@@ -29,8 +27,7 @@ namespace DespoilerEngine {
     printf("Attack log");
   }
 
-  void BattleMaster::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex) {
-
+  void BattleMaster::handleEvents(){
   }
 
   void BattleMaster::clear() {

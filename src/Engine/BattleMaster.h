@@ -16,16 +16,17 @@ class BattleMaster {
 public:
   BattleMaster(std::vector<Creature> creatures, std::shared_ptr<Player> player);
   ~BattleMaster();
-  void startBattle();
+  void init();
   void endBattle();
   void runBattle();
   void runBattle(int &state);
   void AttackLog();
-  void handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex);
+  void handleEvents();
   void clear();
 private:
   std::vector<Creature> CreatureParticipant;
   std::shared_ptr<Player> PlayerParticipant;
+  uint32_t turn = 0;
 };
 
 } // namespace DespoilerEngine
