@@ -1,0 +1,11 @@
+{
+    "name": "Excalibur",
+    "baseRequirements": {
+        "vigor": 10,
+        "strength": 15,
+        "agility": 5,
+        "intelligence": 8
+    },
+    "base": 1000,
+    "type": "Weapon"
+}

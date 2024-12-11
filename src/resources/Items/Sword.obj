@@ -1,0 +1,11 @@
+{
+    "name":"Sword",
+    "base":10,
+    "type":"Weapon",
+    "baseRequirements":{
+        "vigor": 1,
+        "strength": 5,
+        "agility": 0,
+        "intelligence": 0
+    }
+}

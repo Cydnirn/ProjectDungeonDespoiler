@@ -10,6 +10,7 @@
 #include <SDL2/SDL_image.h>
 #include <memory>
 
+#include "ItemsCollection.h"
 #include "Screens/Battle.h"
 #include "Screens/MainMenu.h"
 #include "Screens/Map.h"
@@ -18,11 +19,13 @@
 namespace DespoilerEngine {
     TTF_Font *Game::font = nullptr;
     CreatureCollection LowCreatures;
+    auto ItemsCollection = ItemsCollection::getInstance();
     Game::Game() = default;
     auto Screens =  std::make_unique<ScreenManager>();
 
-    void Game::loadCreature()
+    void Game::loadEssentials()
     {
+        ItemsCollection->loadItems("./resources/Items");
         LowCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/low");
     }
 
@@ -34,6 +37,7 @@ namespace DespoilerEngine {
      */
     int Game::init()
     {
+        this->loadEssentials();
         this->SCREEN_WIDTH=720;
         this->SCREEN_HEIGHT = 480;
         this->fps=30;
