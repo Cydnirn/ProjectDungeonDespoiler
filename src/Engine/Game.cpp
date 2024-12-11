@@ -19,13 +19,13 @@
 namespace DespoilerEngine {
     TTF_Font *Game::font = nullptr;
     CreatureCollection LowCreatures;
-    auto ItemsCollection = ItemsCollection::getInstance();
+    std::shared_ptr<ItemsCollection> Game::ItemsCol = ItemsCollection::getInstance();
     Game::Game() = default;
     auto Screens =  std::make_unique<ScreenManager>();
 
     void Game::loadEssentials()
     {
-        ItemsCollection->loadItems("./resources/Items");
+        Game::ItemsCol->loadItems("./resources/Items");
         LowCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/low");
     }
 

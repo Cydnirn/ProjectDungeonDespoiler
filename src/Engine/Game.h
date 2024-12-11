@@ -7,6 +7,8 @@
 #include <SDL_ttf.h>
 #include <cstdint>
 #include <vector>
+#include <memory>
+#include "ItemsCollection.h"
 
 namespace DespoilerEngine {
 class Game {
@@ -21,6 +23,7 @@ public:
     int SCREEN_HEIGHT{};
     int fps{};
     int desiredDelta{}; //Desired time b/w frames
+    static std::shared_ptr<ItemsCollection> ItemsCol;
     static TTF_Font *font;
     int init();
     void run() const;

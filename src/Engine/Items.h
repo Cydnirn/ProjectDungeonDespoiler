@@ -41,7 +41,7 @@ inline ItemType stringToItemType(const std::string& str) {
 
 typedef struct Items {
   std::string name;
-  Stats baseRequirements = {0,0,0,0,};
+  Stats baseRequirements;
   int base;
   ItemType type;
 }Items;

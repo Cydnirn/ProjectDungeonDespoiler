@@ -7,10 +7,11 @@
 
 #include "Entity.h"
 #include "Inventory.h"
+#include "Game.h"
 #include "Stats.h"
 #include <SDL.h>
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace DespoilerEngine {
 
@@ -35,7 +36,7 @@ private:
   bool moveDown = false;
 
   Stats stats{10, 10, 10, 10};
-  Inventory p_inventory = Inventory();
+  std::shared_ptr<Inventory> inventory = std::make_shared<Inventory>();
   int health = 10 * stats.vigor;
 
 
