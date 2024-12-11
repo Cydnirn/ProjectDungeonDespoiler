@@ -29,10 +29,10 @@ namespace DespoilerEngine {
         file >> j;
 
         Stats stats = {
-            j["stats"]["vigor"].get<uint8_t>(),
-            j["stats"]["strength"].get<uint8_t>(),
-            j["stats"]["agility"].get<uint8_t>(),
-            j["stats"]["intelligence"].get<uint8_t>()
+            j["stats"]["vigor"].get<int>(),
+            j["stats"]["strength"].get<int>(),
+            j["stats"]["agility"].get<int>(),
+            j["stats"]["intelligence"].get<int>()
         };
 
         return {j["name"].get<std::string>(), j["desc"].get<std::string>() , stats};

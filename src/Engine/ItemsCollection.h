@@ -15,7 +15,7 @@ class ItemsCollection {
 public:
   static std::shared_ptr<ItemsCollection> getInstance();
   void addCollection(const Items& item, const std::string& title);
-  Items fromJsonFile(const std::string & filepath);
+  Items fromJsonFile(const std::string &filepath);
   std::unordered_map<std::string, Items> loadItems(const std::string& directory = ".");
   Items getItem(const std::string& title);
   ItemsCollection(const ItemsCollection&) = delete;
