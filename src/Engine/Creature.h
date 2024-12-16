@@ -12,18 +12,29 @@ class Creature {
     std::string name;
     Stats stats{0,0,0,0};
     int health = 10 * stats.vigor;
+    int mana = 10 * stats.intelligence;
+    int xp = 100;
+    int level = xp / 100;
 public:
-    Creature() = default;
     ~Creature() = default;
-    Creature(std::string  name, std::string  desc, Stats  stats);
+    Creature(std::string  name, std::string  desc, Stats  stats, int xp = 100);
 
     // Load a creature from a JSON file
     static Creature fromJsonFile(const std::string& filepath);
 
     // Getters
-    [[nodiscard]] const std::string& getName() const;
-    [[nodiscard]] const Stats &getStats() const;
-    [[nodiscard]] const int* getHealth() const;
+    [[nodiscard]] const std::string& getName() const { return name; };
+    [[nodiscard]] const Stats &getStats() const { return stats; };
+    [[nodiscard]] const std::string& getDescription() const { return description; };
+    [[nodiscard]] const int& getHealth() const { return health; };
+    [[nodiscard]] const int& getMana() const { return mana; };
+    [[nodiscard]] const int& getXP() const { return xp; };
+    [[nodiscard]] const int& getLevel() const { return level; };
+    // Setters
+    void setHealth(int healthInput) { this->health = healthInput; }
+    void setMana(int manaInput) { this->mana = manaInput; }
+    void setXP(int xpInput) { this->xp = xpInput; }
+    void setLevel() { this->level = this->xp / 100; }
 };
 
 } // namespace DespoilerEngine

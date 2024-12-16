@@ -7,7 +7,11 @@
 #include <iostream>
 
 namespace DespoilerEngine {
-  Player::Player(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst): Entity(texture, src, dst)  {
+  Player::Player(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst)
+    : Entity(texture, src, dst),
+      Creature("Player",
+               "The player",
+               {10,10,10,10}) {
     this->e_texture = texture;
     this->e_src = src;
     this->e_dst = dst;

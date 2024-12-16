@@ -5,9 +5,10 @@
 #ifndef PROJECTDUNGEONDESPOILER_PLAYER_H
 #define PROJECTDUNGEONDESPOILER_PLAYER_H
 
+#include "Creature.h"
 #include "Entity.h"
-#include "Inventory.h"
 #include "Game.h"
+#include "Inventory.h"
 #include "Stats.h"
 #include <SDL.h>
 #include <memory>
@@ -15,12 +16,11 @@
 
 namespace DespoilerEngine {
 
-class Player final : public Entity {
+class Player final : public Entity, public Creature {
 public:
   Player(SDL_Texture* texture, SDL_Rect src, SDL_Rect dst);
   static const int p_Width = 50;
   static const int p_Height = 50;
-
 
   // Velocity of the player
   static const int p_vel = 10;
@@ -34,10 +34,8 @@ private:
   bool moveRight = false;
   bool moveUp = false;
   bool moveDown = false;
-
-  Stats stats{10, 10, 10, 10};
   std::shared_ptr<Inventory> inventory = std::make_shared<Inventory>();
-  int health = 10 * stats.vigor;
+  int health = 10 * this->getStats().vigor;
 
 
   std::vector<SDL_Rect> pColliders;
