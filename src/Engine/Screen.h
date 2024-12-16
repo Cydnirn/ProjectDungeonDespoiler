@@ -70,6 +70,13 @@ protected:
   SDL_Renderer * s_renderer;
   const int * SCREEN_WIDTH;
   const int * SCREEN_HEIGHT;
+
+public:
+  //Getter
+  [[nodiscard]] SDL_Window* getWindow() const { return s_window; }
+  [[nodiscard]] SDL_Renderer* getRenderer() const { return s_renderer; }
+  [[nodiscard]] const int* getScreenWidth() const { return SCREEN_WIDTH; }
+  [[nodiscard]] const int* getScreenHeight() const { return SCREEN_HEIGHT; }
 };
 }
 #endif //SCREEN_H

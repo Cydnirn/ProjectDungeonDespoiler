@@ -35,7 +35,16 @@ namespace DespoilerEngine {
   void BattleScene::run(int &state) const{
     clear();
     this->render(0,0,BgTextureBattle);
-    this->renderCenter(0, 0, "This is a battle scene", Game::font, {255,255,255, 0});
+    int creatureCount = Master->getCreatureParticipant().size();
+    int screenWidth = *this->getScreenWidth();
+    int screenHeight = *this->getScreenHeight();
+    int creatureWidth = screenWidth / creatureCount;
+    for(size_t i = 0; i < creatureCount; i++){
+      int xPos = i * creatureWidth;
+      std::string healthStatus = std::to_string(Master->getCreatureParticipant()[i].getHealth()) + "/" + std::to_string(Master->getCreatureParticipant()[i].getMaxHealth());
+      this->render(xPos + 15 + Master->getCreatureParticipant()[i].getName().length() * 5, 25, Master->getCreatureParticipant()[i].getName().c_str(), Game::font, {255,255,255, 0});
+      this->render(xPos + 15 + Master->getCreatureParticipant()[i].getName().length() * 5, 50, healthStatus.c_str() , Game::font, {255,255,255, 0});
+    }
     for(size_t i = 0; i < BattleOptions.size(); i++){
       SDL_Color color = (i == selected)  ? SDL_Color{255,0,0,0} : SDL_Color{255,255,255,0};
       this->renderText(this->s_renderer, Game::font, BattleOptions[i].text, BattleOptions[i].rect.x, BattleOptions[i].rect.y, color);

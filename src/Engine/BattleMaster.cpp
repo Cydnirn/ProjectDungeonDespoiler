@@ -17,6 +17,9 @@ namespace DespoilerEngine {
   }
 
   void BattleMaster::push_creature(const Creature& creature) {
+    if(CreatureParticipant.size() >= 3){
+      CreatureParticipant.clear();
+    }
     CreatureParticipant.emplace_back(creature);
     for(auto &creatureNew: CreatureParticipant){
       printf("Creature: %s \n", creatureNew.getName().c_str());
@@ -44,7 +47,8 @@ namespace DespoilerEngine {
   }
 
   void BattleMaster::clear() {
-    printf("BattleMaster is cleared");
+    printf("BattleMaster is cleared \n");
+    CreatureParticipant.clear();
   }
 
   void BattleMaster::endBattle() {
@@ -52,7 +56,7 @@ namespace DespoilerEngine {
   }
 
   BattleMaster::~BattleMaster() {
-    printf("BattleMaster is destroyed");
+    printf("BattleMaster is destroyed \n");
     BattleMaster::clear();
   }
 

@@ -15,7 +15,12 @@ namespace DespoilerEngine {
 class BattleScene final : public Scene {
 public:
   ~BattleScene() override;
-  BattleScene(SDL_Window *s_window, SDL_Renderer *s_renderer, const int *p_width, const int *p_height, std::shared_ptr<CreatureCollection> creatures, std::shared_ptr<Player> player);
+  BattleScene(SDL_Window *s_window,
+              SDL_Renderer *s_renderer,
+              const int *p_width,
+              const int *p_height,
+              std::shared_ptr<CreatureCollection> creatures,
+              std::shared_ptr<Player> player);
   void init() override;
   void run(int &state) const override;
   void cleanUp() const override;

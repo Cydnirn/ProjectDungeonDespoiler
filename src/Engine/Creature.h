@@ -14,6 +14,7 @@ class Creature {
     int baseDamage = 10 * stats.strength;
     int baseCritical = stats.agility;
     int health = 10 * stats.vigor;
+    int maxHealth = 10 * stats.vigor;
     int mana = 10 * stats.intelligence;
     int xp = 100;
     int level = xp / 100;
@@ -31,6 +32,7 @@ public:
     [[nodiscard]] const Stats &getStats() const { return stats; };
     [[nodiscard]] const std::string& getDescription() const { return description; };
     [[nodiscard]] const int& getHealth() const { return health; };
+    [[nodiscard]] const int& getMaxHealth() const { return maxHealth; };
     [[nodiscard]] const int& getMana() const { return mana; };
     [[nodiscard]] const int& getXP() const { return xp; };
     [[nodiscard]] const int& getLevel() const { return level; };
