@@ -27,7 +27,7 @@ namespace DespoilerEngine {
     moveLeft = (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A]) > 0;
     moveRight = (state[SDL_SCANCODE_RIGHT] || state[SDL_SCANCODE_D]) > 0;
     if(e.type == SDL_KEYDOWN){
-      bool toBattle = RandomGenerator::generateRandomNumber(1, 100) < 25;
+      bool toBattle = RandomGenerator::generateRandomFloat(1.00, 100.00) < 2.5;
       if(toBattle) index = 2;
     }
     if(moveUp){
