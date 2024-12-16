@@ -17,9 +17,15 @@ public:
   void init() override;
   void run(int &state) const override;
   void cleanUp() const override;
-  void handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex) const override;
+  void handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex) override;
 
 private:
+  int selected = 0;
+  std::vector<MenuOption> BattleOptions = {
+    {"Attack", {50, 300, 0, 0}},
+    {"Defend", {50, 350, 0, 0}},
+    {"Run", {50, 400, 0, 0}}
+  };
   mutable SDL_Texture *BgTextureBattle;
   CreatureCollection *Creatures;
   std::vector<Creature> CreaturesBattle;

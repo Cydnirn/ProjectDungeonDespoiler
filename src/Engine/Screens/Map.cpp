@@ -50,7 +50,7 @@ void Map::run(int &state) const {
 }
 
 void Map::handleEvents(SDL_Event &event, bool &isRunning,
-                          int &currentIndex) const {
+                          int &currentIndex)  {
   player->handleEvent(event);
     if (event.type == SDL_QUIT)
     {

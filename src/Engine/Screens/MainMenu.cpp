@@ -25,7 +25,7 @@ void MainMenu::run(int &state) const {
 
 
 void MainMenu::handleEvents(SDL_Event &event, bool &isRunning,
-                            int &currentIndex) const {
+                            int &currentIndex)  {
     if (event.type == SDL_QUIT)
     {
       isRunning = false;
