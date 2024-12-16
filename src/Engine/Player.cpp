@@ -4,7 +4,6 @@
 
 #include "Player.h"
 #include <SDL_image.h>
-#include <iostream>
 
 namespace DespoilerEngine {
   Player::Player(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst)
