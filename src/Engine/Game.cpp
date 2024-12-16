@@ -102,7 +102,7 @@ namespace DespoilerEngine {
 
         const auto main_menu_window = std::make_shared<MainMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
         const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, player);
-        const auto battle_window = std::make_shared<BattleScene>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, LowCreatures);
+        const auto battle_window = std::make_shared<BattleScene>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, LowCreatures, player);
 
         // Add screens to the screen loader
         Screens->addScreen(main_menu_window);
