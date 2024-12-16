@@ -15,6 +15,7 @@ public:
   Inventory() = default;
   ~Inventory() = default;
   void addItem(std::string name, Items item);
+  Items *get(std::string name);
   void removeItem(std::string name);
   std::unordered_map<std::string, Items> items;
 };

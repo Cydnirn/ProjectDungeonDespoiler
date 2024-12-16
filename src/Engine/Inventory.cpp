@@ -14,4 +14,11 @@ namespace DespoilerEngine {
   void Inventory::removeItem(std::string name) {
     items.erase(name);
   }
-} // namespace DespoilerEngine
+  Items *Inventory::get(std::string name) {
+    auto item = items.find(name);
+    if(item != items.end()){
+      return &item->second;
+    }
+    return nullptr;
+  }
+  } // namespace DespoilerEngine
