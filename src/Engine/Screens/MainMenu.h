@@ -17,7 +17,7 @@ public:
   void run(int &state) const override;
   void cleanUp() const override;
   void handleEvents(SDL_Event &event, bool &isRunning,
-                    int &currentIndex) const override;
+                    int &currentIndex)  override;
 
 private:
   mutable SDL_Texture *BgTextureMain;

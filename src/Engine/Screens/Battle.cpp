@@ -17,10 +17,17 @@ namespace DespoilerEngine {
     clear();
     this->render(0,0,BgTextureBattle);
     this->renderCenter(0, 0, "This is a battle scene", Game::font, {255,255,255, 0});
+    for(size_t i = 0; i < BattleOptions.size(); i++){
+      SDL_Color color = (i == selected)  ? SDL_Color{255,0,0,0} : SDL_Color{255,255,255,0};
+      this->renderText(this->s_renderer, Game::font, BattleOptions[i].text, BattleOptions[i].rect.x, BattleOptions[i].rect.y, color);
+      if(i == selected) {
+        SDL_RenderDrawLine(this->s_renderer, BattleOptions[i].rect.x, BattleOptions[i].rect.y + BattleOptions[i].rect.h, BattleOptions[i].rect.x + BattleOptions[i].rect.w, BattleOptions[i].rect.y + BattleOptions[i].rect.h);
+      }
+    }
     display();
   }
 
-  void BattleScene::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex) const {
+  void BattleScene::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex)  {
     if(event.type == SDL_QUIT){
       isRunning = false;
     }
@@ -33,6 +40,11 @@ namespace DespoilerEngine {
         case SDLK_BACKSPACE:
           currentIndex = 1;
           break;
+        case SDLK_UP:
+          selected = (selected - 1 + BattleOptions.size()) % BattleOptions.size();
+          break;
+        case SDLK_DOWN:
+          selected = (selected + 1) % BattleOptions.size();
         default:
           break;
       }
