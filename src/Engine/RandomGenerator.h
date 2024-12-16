@@ -10,9 +10,6 @@ namespace DespoilerEngine {
 class RandomGenerator {
 public:
   static int generateRandomNumber(int min, int max);
-  static float generateRandomFloat(float min, float max);
-  static bool generateRandomBool();
-  static bool generateRandomBool(float probability);
 };
 
 } // namespace DespoilerEngine
