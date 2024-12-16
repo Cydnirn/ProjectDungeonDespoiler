@@ -3,6 +3,7 @@
 //
 
 #include "Player.h"
+#include "RandomGenerator.h"
 #include <SDL_image.h>
 
 namespace DespoilerEngine {
@@ -18,14 +19,17 @@ namespace DespoilerEngine {
     this->setBaseDamage(this->inventory->get("Sword")->base);
   }
 
-  void Player::handleEvent(SDL_Event &e) {
+  void Player::handleEvent(SDL_Event &e, int &index) {
     // If a key was pressed
     auto state = SDL_GetKeyboardState(nullptr);
     moveUp = (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]) > 0;
     moveDown = (state[SDL_SCANCODE_DOWN] || state[SDL_SCANCODE_S]) > 0;
     moveLeft = (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A]) > 0;
     moveRight = (state[SDL_SCANCODE_RIGHT] || state[SDL_SCANCODE_D]) > 0;
-
+    if(e.type == SDL_KEYDOWN){
+      bool toBattle = RandomGenerator::generateRandomNumber(1, 100) < 25;
+      if(toBattle) index = 2;
+    }
     if(moveUp){
         e_dst.y -= p_vel;
     }

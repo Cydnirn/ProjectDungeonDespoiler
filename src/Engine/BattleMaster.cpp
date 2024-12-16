@@ -3,24 +3,29 @@
 //
 
 #include "BattleMaster.h"
+#include <memory>
 #include <vector>
 #include <memory>
 #include "Creature.h"
 
 namespace DespoilerEngine {
-  BattleMaster::BattleMaster(std::vector<Creature> creatures, std::shared_ptr<Player> player):
-  CreatureParticipant(creatures), PlayerParticipant(std::move(player)){}
+  BattleMaster::BattleMaster( std::shared_ptr<Player> player)
+    :PlayerParticipant(std::move(player)){}
 
-  std::unique_ptr<BattleMaster> BattleMaster::getInstance(std::vector<Creature> creatures, std::shared_ptr<Player> player) {
-    static std::unique_ptr<BattleMaster> instance;
-    if (!instance) {
-      instance = std::make_unique<BattleMaster>(creatures, player);
+  std::unique_ptr<BattleMaster> BattleMaster::getInstance(std::shared_ptr<Player> player) {
+    return std::make_unique<BattleMaster>(std::move(player));
+  }
+
+  void BattleMaster::push_creature(const Creature& creature) {
+    CreatureParticipant.emplace_back(creature);
+    for(auto &creatureNew: CreatureParticipant){
+      printf("Creature: %s \n", creatureNew.getName().c_str());
     }
-    return std::unique_ptr<BattleMaster>(instance.get());
   }
 
   void BattleMaster::init() {
-    printf("Battle has started");
+    printf("BattleMaster is initialized \n");
+    printf("Player: %s \n", PlayerParticipant->getName().c_str());
   }
 
   void BattleMaster::runBattle() {

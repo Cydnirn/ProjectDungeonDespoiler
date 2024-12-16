@@ -31,8 +31,7 @@ private:
   mutable SDL_Texture *BgTextureBattle;
   std::shared_ptr<CreatureCollection> Creatures;
   std::shared_ptr<Player> player;
-  std::unique_ptr<BattleMaster> Master;
-  std::vector<Creature> CreaturesBattle;
+  mutable std::unique_ptr<BattleMaster> Master;
 };
 
 } // namespace DespoilerEngine

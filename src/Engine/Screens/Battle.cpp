@@ -16,16 +16,20 @@ namespace DespoilerEngine {
                          std::shared_ptr<Player> player
                          )
   : Scene(s_window, s_renderer, p_width, p_height),
-      BgTextureBattle(nullptr), Creatures(creatures), player(player){}
+      BgTextureBattle(nullptr), Creatures(creatures), player(player), Master(nullptr){}
 
   void BattleScene::init() {
     loadIcon("./resources/Textures/icon.ico");
     BgTextureBattle = loadTexture("./resources/Textures/background.png");
     //Generate number of creature spawned
+    if(!Master){
+      Master = BattleMaster::getInstance(player);
+      Master->init();
+    }
     int numCreatures = RandomGenerator::generateRandomNumber(1, 3);
-    for(int i = 0; i < numCreatures; i++)
-          CreaturesBattle.emplace_back(Creatures->spawnRandomCreature());
-    Master = BattleMaster::getInstance(CreaturesBattle, player);
+    for(int i = 0; i < numCreatures; i++){
+          Master->push_creature(Creatures->spawnRandomCreature());
+    }
   }
 
   void BattleScene::run(int &state) const{
@@ -54,6 +58,7 @@ namespace DespoilerEngine {
           isRunning = false;
           break;
         case SDLK_BACKSPACE:
+          Master->clear();
           currentIndex = 1;
           break;
         case SDLK_UP:
@@ -72,7 +77,10 @@ namespace DespoilerEngine {
       SDL_DestroyTexture(BgTextureBattle);
       BgTextureBattle = nullptr;
     }
-    SDL_DestroyRenderer(this->s_renderer);
+    if(Master){
+      Master->clear();
+      Master = nullptr;
+    }
   }
 
   BattleScene::~BattleScene(){
