@@ -3,7 +3,7 @@
     "desc": "A basic rat",
     "xp": 100,
     "level": 1,
-    "baseDmg": 1
+    "baseDmg": 1,
     "stats": {
         "vigor": 1,
         "strength": 1,

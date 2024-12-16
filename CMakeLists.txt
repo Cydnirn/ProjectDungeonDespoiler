@@ -18,7 +18,7 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Scene.cpp
         src/Engine/Scene.h
         src/Engine/ScreenManager.cpp
-        src/Engine/CreatureLoader.cpp
+        src/Engine/CreatureCollection.cpp
         src/Engine/Math.h
         src/Engine/Screen.h
         src/Engine/Screens/MainMenu.cpp
