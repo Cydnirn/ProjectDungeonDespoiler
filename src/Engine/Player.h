@@ -25,7 +25,7 @@ public:
   // Velocity of the player
   static const int p_vel = 10;
 
-  void handleEvent(SDL_Event &e) override;
+  void handleEvent(SDL_Event &e, int &index) override;
   [[maybe_unused]] std::vector<SDL_Rect>& getColliders();
   std::shared_ptr<Items> Weapon;
 

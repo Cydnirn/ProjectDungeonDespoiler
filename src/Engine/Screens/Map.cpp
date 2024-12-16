@@ -51,7 +51,7 @@ void Map::run(int &state) const {
 
 void Map::handleEvents(SDL_Event &event, bool &isRunning,
                           int &currentIndex)  {
-  player->handleEvent(event);
+  player->handleEvent(event, currentIndex);
     if (event.type == SDL_QUIT)
     {
       isRunning = false;
@@ -66,10 +66,6 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
         break;
       case SDLK_BACKSPACE:
         currentIndex = 0;
-        break;
-      case SDLK_RETURN:
-      case SDLK_KP_ENTER:
-        currentIndex = 2;
         break;
       default:
         break;
