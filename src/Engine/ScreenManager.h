@@ -13,8 +13,6 @@ public:
   ~ScreenManager();
   ScreenManager() = default;
   [[maybe_unused]] void addScreen(const std::shared_ptr<Scene>& Screen);
-  template <typename T>
-  void addScreen(T* p_screen);
   [[maybe_unused]] void removeScreen(Scene *p_screen);
   void initializeScreen(int index)const;
   void runScreen(int index) const;
