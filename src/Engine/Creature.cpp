@@ -7,12 +7,17 @@
 #include <stdexcept>
 #include <nlohmann/json.hpp>
 #include <utility>
+#include "Stats.h"
 
 using json = nlohmann::json;
 
 namespace DespoilerEngine {
-    Creature::Creature(std::string  name, const std::string& desc, const Stats  stats)
-    : name(std::move(name)), stats(stats) {}
+    Creature::Creature(std::string  name, std::string  desc, const Stats  stats)
+    : name(std::move(name)), description(std::move(desc)), stats(stats) {}
+
+    Creature::~Creature() {
+        printf("Creature is destroyed");
+    }
 
     Creature Creature::fromJsonFile(const std::string& filepath) {
         std::ifstream file(filepath);
@@ -53,7 +58,7 @@ namespace DespoilerEngine {
         return name;
     }
 
-    const Creature::Stats& Creature::getStats() const {
+    const Stats& Creature::getStats() const {
         return stats;
     }
 

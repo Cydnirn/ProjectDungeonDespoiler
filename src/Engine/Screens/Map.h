@@ -4,28 +4,32 @@
 
 #ifndef MAP_H
 #define MAP_H
-#include "../Scene.h"
 #include "../Game.h"
+#include "../Player.h"
+#include "../Scene.h"
+#include <memory>
 
 namespace DespoilerEngine {
 
 class Map final : public Scene{
 public:
-  ~Map() override = default;
-  Map(const char *p_title, int p_w, int p_h);
-  Map(const std::string &p_title, int p_w, int p_h);
+  ~Map() override;
+  Map(SDL_Window *p_window, SDL_Renderer *p_renderer, const int *p_width,
+      const int *p_height, std::shared_ptr<Player> player);
   void init() override;
   void run(int &state) const override;
-  void clear() const override;
   void cleanUp() const override;
   void handleEvents(SDL_Event &event, bool &isRunning,
                     int &currentIndex) const override;
 
 private:
-  SDL_Texture *BgTextureMain;
+  mutable SDL_Texture *BgTextureMain;
+  mutable SDL_Texture *p_texture{};
+  mutable SDL_Surface *p_img{};
+  mutable SDL_Texture *WallTexture{};
+  SDL_Rect WallRect{};
+  std::shared_ptr<Player> player;
 };
-
-inline auto map_window = new Map(*Title,SCREEN_WIDTH, SCREEN_HEIGHT);
 
 } // DespoilerEngine
 

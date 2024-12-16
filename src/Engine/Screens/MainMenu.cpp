@@ -3,29 +3,24 @@
 //
 
 #include "MainMenu.h"
-#include "../Game.h"
 
 namespace DespoilerEngine {
-SDL_Texture *BgTextureMain;
- MainMenu::MainMenu(const char *p_title, const int p_w, const int p_h)
-    : Scene(p_title, p_w, p_h),BgTextureMain(nullptr) {}
+ MainMenu::MainMenu(SDL_Window* p_window, SDL_Renderer* p_renderer, const int * p_width, const int * p_height)
+  : Scene(p_window, p_renderer, p_width, p_height), BgTextureMain(nullptr) {}
 
-MainMenu::MainMenu(const std::string &p_title, const int p_w, const int p_h)
-     : Scene(p_title, p_w, p_h), BgTextureMain(nullptr) {}
-
- void MainMenu::init() {
-   main_menu_window->loadIcon("./resources/Textures/icon.jpeg");
-   BgTextureMain = main_menu_window->loadTexture("./resources/Textures/background.png");
+void MainMenu::init() {
+   loadIcon("./resources/Textures/icon.ico");
+   BgTextureMain = loadTexture("./resources/Textures/background.png");
  }
 
 
 void MainMenu::run(int &state) const {
-       main_menu_window->clear();
-       main_menu_window->render(0, 0, BgTextureMain);
-       main_menu_window->renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});
-       main_menu_window->renderCenter(0, 25, "Press Enter to start", Game::font, {255, 255, 255});
-       main_menu_window->renderCenter(0, 75, "Press Q to quit", Game::font, {255, 255, 255});
-       main_menu_window->display();
+   clear();
+   this->render(0, 0, BgTextureMain);
+   this->renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});
+   this->renderCenter(0, 25, "Press Enter to start", Game::font, {255, 255, 255});
+   this->renderCenter(0, 75, "Press Q to quit", Game::font, {255, 255, 255});
+   display();
  }
 
 
@@ -40,18 +35,12 @@ void MainMenu::handleEvents(SDL_Event &event, bool &isRunning,
       switch (event.key.keysym.sym)
       {
       case SDLK_q:
-        isRunning = false;
-        std::cout << "Quitting" << std::endl;
-        break;
       case SDLK_ESCAPE:
         isRunning = false;
         break;
       case SDLK_RETURN:
         case SDLK_KP_ENTER:
-        std::cout << currentIndex << std::endl;
         currentIndex += 1;
-        clear();
-
         break;
       default:
         break;
@@ -59,13 +48,16 @@ void MainMenu::handleEvents(SDL_Event &event, bool &isRunning,
     }
 }
 
-void MainMenu::clear() const {
-   SDL_RenderClear(renderer);
+void MainMenu::cleanUp() const {
+   if (BgTextureMain) {
+     SDL_DestroyTexture(BgTextureMain);
+     BgTextureMain = nullptr;
+   }
+   SDL_DestroyRenderer(this->s_renderer);
  }
 
-void MainMenu::cleanUp() const {
-   SDL_DestroyRenderer(renderer);
- }
+MainMenu::~MainMenu() {
+   printf("MainMenu is destroyed");cleanUp();}
 
 
 

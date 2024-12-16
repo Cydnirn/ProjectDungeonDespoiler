@@ -18,16 +18,28 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/Scene.cpp
         src/Engine/Scene.h
         src/Engine/ScreenManager.cpp
-        src/Engine/ScreenManager.h
         src/Engine/CreatureLoader.cpp
-        src/Engine/Entity.cpp
-        src/Engine/Entity.h
         src/Engine/Math.h
         src/Engine/Screen.h
         src/Engine/Screens/MainMenu.cpp
         src/Engine/Screens/MainMenu.h
         src/Engine/Screens/Map.cpp
         src/Engine/Screens/Map.h
+        src/Engine/ScreenManager.h
+        src/Engine/Player.cpp
+        src/Engine/Player.h
+        src/Engine/Entity.h
+        src/Engine/Inventory.cpp
+        src/Engine/Inventory.h
+        src/Engine/Items.h
+        src/Engine/Stats.h
+        src/Engine/Items/Sword.cpp
+        src/Engine/RandomGenerator.cpp
+        src/Engine/RandomGenerator.h
+        src/Engine/Screens/Battle.cpp
+        src/Engine/Screens/Battle.h
+        src/Engine/BattleMaster.cpp
+        src/Engine/BattleMaster.h
 )
 
 target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json OpenAL::OpenAL sdl_ttf::sdl_ttf SDL2_image::SDL2_image SDL2::SDL2main)

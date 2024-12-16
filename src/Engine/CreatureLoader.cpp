@@ -1,13 +1,7 @@
-//
-// Created by rei on 12/3/24.
-//
-
 #include "CreatureLoader.h"
 #include <filesystem>
 #include <iostream>
-#include <random>
-
-#include "../Engine/Creature.h"
+#include "RandomGenerator.h"
 
 namespace DespoilerEngine {
 
@@ -19,7 +13,7 @@ namespace DespoilerEngine {
             if (entry.path().extension() == ".obj"){
                 try
                 {
-                    Creatures.push_back(Creature::fromJsonFile(entry.path().string()));
+                    Creatures.emplace_back(Creature::fromJsonFile(entry.path().string()));
                 }
                 catch (const std::exception& e)
                 {
@@ -36,13 +30,12 @@ namespace DespoilerEngine {
         {
             throw std::runtime_error("No creatures loaded.");
         }
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<size_t> dist(0, collection.Creatures.size() - 1);
 
-        //Pick random Creature from collection
-        size_t index = dist(gen);
+        // Pick random Creature from collection
+        const size_t index = RandomGenerator::generateRandomNumber(0, collection.Creatures.size() - 1);
         return collection.Creatures[index];
     }
+
+    CreatureLoader::~CreatureLoader() =default;
 
 } // DespoilerEngine

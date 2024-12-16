@@ -3,42 +3,61 @@
 //
 
 #include "Map.h"
+#include <SDL_image.h>
+
+#include "memory"
+#include <iostream>
+#include <utility>
 
 namespace DespoilerEngine {
-  Map::Map(const char *p_title, int p_w, int p_h)
-    : Scene(p_title, p_w, p_h, false), BgTextureMain(nullptr) {}
-  Map::Map(const std::string &p_title, int p_w, int p_h)
-       : Scene(p_title.c_str(), p_w, p_h, false), BgTextureMain(nullptr) {}
+  Map::Map(SDL_Window *p_window, SDL_Renderer *p_renderer, const int *p_width,
+           const int *p_height, std::shared_ptr<Player> player)
+      : Scene(p_window, p_renderer, p_width, p_height), BgTextureMain(nullptr), p_texture(nullptr), p_img(nullptr), player(std::move(player)) {}
 
   void Map::init() {
-        map_window->loadIcon("./resources/Textures/icon.jpeg");
-        BgTextureMain = map_window->loadTexture("./resources/Textures/background.png");
+    loadIcon("./resources/Textures/icon.ico");
+    BgTextureMain = loadTexture("./resources/Textures/background.png");
+    WallTexture = loadTexture("./resources/Textures/wall.png");
+    if (WallTexture == nullptr) {
+      std::cerr << "Failed to load wall texture: " << SDL_GetError() << std::endl;
+      return;
+    }
+
+    // Set posisi dan ukuran wall (contoh).
+    WallRect = {100, 100, 64, 64}; // x, y, width, height
   }
 
 void Map::run(int &state) const {
-  map_window->clear();
-  map_window->render(0, 0, BgTextureMain);
-  map_window->renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});
-  map_window->renderCenter(0, 25, "This is a map", Game::font, {255, 255, 255});
-  map_window->display();
+  clear();
+  this->render(0, 0, BgTextureMain);
+  this->renderScaled(1, 1, WallTexture, 50, 50);
+  this->renderScaled(50, 50, p_texture, 250, 250);
+  this->renderCenter(0, -210, "Dungeon Despoiler", Game::font, {255, 255, 255});
+  this->render(player);
+  display();
 }
 
 void Map::handleEvents(SDL_Event &event, bool &isRunning,
                           int &currentIndex) const {
+  player->handleEvent(event);
     if (event.type == SDL_QUIT)
     {
       isRunning = false;
     }
-    if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+    if (event.type == SDL_KEYDOWN)
     {
       switch (event.key.keysym.sym)
       {
       case SDLK_q:
-        isRunning = false;
-        std::cout << "Quitting" << std::endl;
-        break;
       case SDLK_ESCAPE:
         isRunning = false;
+        break;
+      case SDLK_BACKSPACE:
+        currentIndex = 0;
+        break;
+      case SDLK_RETURN:
+      case SDLK_KP_ENTER:
+        currentIndex = 2;
         break;
       default:
         break;
@@ -46,12 +65,24 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
     }
   }
 
-  void Map::clear() const {
-    SDL_RenderClear(renderer);
+  void Map::cleanUp() const {
+    if (BgTextureMain) {
+      SDL_DestroyTexture(BgTextureMain);
+      BgTextureMain = nullptr;
+    }
+    if(WallTexture){
+      SDL_DestroyTexture(WallTexture);
+      WallTexture = nullptr;
+    }
+    if(player){
+      SDL_DestroyTexture(p_texture);
+      SDL_FreeSurface(p_img);
+    }
+    SDL_DestroyRenderer(this->s_renderer);
   }
 
-  void Map::cleanUp() const {
-    SDL_DestroyRenderer(renderer);
+  Map::~Map() {
+    cleanUp();
   }
 
 
