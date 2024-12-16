@@ -3,7 +3,7 @@
 //
 
 #include "Game.h"
-#include "CreatureLoader.h"
+#include "CreatureCollection.h"
 #include "ScreenManager.h"
 
 #include <SDL2/SDL.h>
@@ -18,7 +18,7 @@
 
 namespace DespoilerEngine {
     TTF_Font *Game::font = nullptr;
-    CreatureCollection LowCreatures;
+    auto LowCreatures = CreatureCollection::getInstance();
     std::shared_ptr<ItemsCollection> Game::ItemsCol = ItemsCollection::getInstance();
     Game::Game() = default;
     auto Screens =  std::make_unique<ScreenManager>();
@@ -26,7 +26,7 @@ namespace DespoilerEngine {
     void Game::loadEssentials()
     {
         Game::ItemsCol->loadItems("./resources/Items");
-        LowCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/low");
+        LowCreatures->loadCreatures("./resources/Creatures/low");
     }
 
     /**
@@ -102,7 +102,7 @@ namespace DespoilerEngine {
 
         const auto main_menu_window = std::make_shared<MainMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
         const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, player);
-        const auto battle_window = std::make_shared<BattleScene>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
+        const auto battle_window = std::make_shared<BattleScene>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, LowCreatures);
 
         // Add screens to the screen loader
         Screens->addScreen(main_menu_window);

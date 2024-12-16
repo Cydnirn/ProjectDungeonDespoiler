@@ -46,7 +46,7 @@ namespace DespoilerEngine {
     for(const auto &entry:std::filesystem::directory_iterator(directory)){
       if(entry.path().extension() == ".obj"){
         try{
-          Items item = this->fromJsonFile(entry.path().string());
+          Items item = DespoilerEngine::ItemsCollection::fromJsonFile(entry.path().string());
           this->addCollection(item, item.name);
         }catch(const std::exception& e){
           std::cerr << "Error loading item from file: " << entry.path().string() << " with exception: " << e.what() << "\n";

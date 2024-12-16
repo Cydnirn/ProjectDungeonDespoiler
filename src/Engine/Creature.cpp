@@ -31,7 +31,7 @@ namespace DespoilerEngine {
             j["stats"]["intelligence"].get<int>()
         };
 
-        return {j["name"].get<std::string>(), j["desc"].get<std::string>() , stats, j["xp"].get<int>(), j["baseDmg"].get<int>()};
+        return {j["name"].get<std::string>(), j["desc"].get<std::string>(), stats, j["xp"].get<int>(), j["baseDmg"].get<int>()};
     }
 
 

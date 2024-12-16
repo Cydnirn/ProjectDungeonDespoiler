@@ -3,10 +3,11 @@
 //
 
 #include "Battle.h"
+#include "../Game.h"
 
 namespace DespoilerEngine {
-  BattleScene::BattleScene(SDL_Window *s_window, SDL_Renderer *s_renderer, const int *p_width, const int *p_height)
-  : Scene(s_window, s_renderer, p_width, p_height){}
+  BattleScene::BattleScene(SDL_Window *s_window, SDL_Renderer *s_renderer, const int *p_width, const int *p_height, std::shared_ptr<CreatureCollection> creatures)
+  : Scene(s_window, s_renderer, p_width, p_height), BgTextureBattle(nullptr), Creatures(creatures){}
 
   void BattleScene::init() {
     loadIcon("./resources/Textures/icon.ico");

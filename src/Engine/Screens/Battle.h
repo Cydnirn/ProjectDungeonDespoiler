@@ -5,7 +5,7 @@
 #ifndef PROJECTDUNGEONDESPOILER_BATTLE_H
 #define PROJECTDUNGEONDESPOILER_BATTLE_H
 #include "../Creature.h"
-#include "../CreatureLoader.h"
+#include "../CreatureCollection.h"
 #include "../Scene.h"
 
 namespace DespoilerEngine {
@@ -13,7 +13,7 @@ namespace DespoilerEngine {
 class BattleScene final : public Scene {
 public:
   ~BattleScene() override;
-  BattleScene(SDL_Window *s_window, SDL_Renderer *s_renderer, const int *p_width, const int *p_height);
+  BattleScene(SDL_Window *s_window, SDL_Renderer *s_renderer, const int *p_width, const int *p_height, std::shared_ptr<CreatureCollection> creatures);
   void init() override;
   void run(int &state) const override;
   void cleanUp() const override;
@@ -27,7 +27,7 @@ private:
     {"Run", {50, 400, 0, 0}}
   };
   mutable SDL_Texture *BgTextureBattle;
-  CreatureCollection *Creatures;
+  std::shared_ptr<CreatureCollection> Creatures;
   std::vector<Creature> CreaturesBattle;
 };
 
