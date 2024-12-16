@@ -16,6 +16,7 @@ class BattleMaster {
 public:
   BattleMaster(std::vector<Creature> creatures, std::shared_ptr<Player> player);
   ~BattleMaster();
+  static std::unique_ptr<BattleMaster> getInstance(std::vector<Creature> creatures, std::shared_ptr<Player> player);
   void init();
   void endBattle();
   void runBattle();

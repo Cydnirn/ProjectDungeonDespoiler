@@ -11,6 +11,14 @@ namespace DespoilerEngine {
   BattleMaster::BattleMaster(std::vector<Creature> creatures, std::shared_ptr<Player> player):
   CreatureParticipant(creatures), PlayerParticipant(std::move(player)){}
 
+  std::unique_ptr<BattleMaster> BattleMaster::getInstance(std::vector<Creature> creatures, std::shared_ptr<Player> player) {
+    static std::unique_ptr<BattleMaster> instance;
+    if (!instance) {
+      instance = std::make_unique<BattleMaster>(creatures, player);
+    }
+    return std::unique_ptr<BattleMaster>(instance.get());
+  }
+
   void BattleMaster::init() {
     printf("Battle has started");
   }

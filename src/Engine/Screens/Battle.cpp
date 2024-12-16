@@ -4,14 +4,28 @@
 
 #include "Battle.h"
 #include "../Game.h"
+#include "../RandomGenerator.h"
+#include "../BattleMaster.h"
 
 namespace DespoilerEngine {
-  BattleScene::BattleScene(SDL_Window *s_window, SDL_Renderer *s_renderer, const int *p_width, const int *p_height, std::shared_ptr<CreatureCollection> creatures)
-  : Scene(s_window, s_renderer, p_width, p_height), BgTextureBattle(nullptr), Creatures(creatures){}
+  BattleScene::BattleScene(SDL_Window *s_window,
+                         SDL_Renderer *s_renderer,
+                         const int *p_width,
+                         const int *p_height,
+                         std::shared_ptr<CreatureCollection> creatures,
+                         std::shared_ptr<Player> player
+                         )
+  : Scene(s_window, s_renderer, p_width, p_height),
+      BgTextureBattle(nullptr), Creatures(creatures), player(player){}
 
   void BattleScene::init() {
     loadIcon("./resources/Textures/icon.ico");
     BgTextureBattle = loadTexture("./resources/Textures/background.png");
+    //Generate number of creature spawned
+    int numCreatures = RandomGenerator::generateRandomNumber(1, 3);
+    for(int i = 0; i < numCreatures; i++)
+          CreaturesBattle.emplace_back(Creatures->spawnRandomCreature());
+    Master = BattleMaster::getInstance(CreaturesBattle, player);
   }
 
   void BattleScene::run(int &state) const{
@@ -29,6 +43,7 @@ namespace DespoilerEngine {
   }
 
   void BattleScene::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex)  {
+    Master->handleEvents();
     if(event.type == SDL_QUIT){
       isRunning = false;
     }
