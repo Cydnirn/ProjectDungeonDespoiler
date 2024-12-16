@@ -15,6 +15,7 @@ namespace DespoilerEngine {
     this->e_src = src;
     this->e_dst = dst;
     this->inventory->addItem(Game::ItemsCol->getItem("Sword").name, Game::ItemsCol->getItem("Sword"));
+    this->setBaseDamage(this->inventory->get("Sword")->base);
   }
 
   void Player::handleEvent(SDL_Event &e) {
