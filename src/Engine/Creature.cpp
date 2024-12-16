@@ -15,10 +15,6 @@ namespace DespoilerEngine {
     Creature::Creature(std::string  name, std::string  desc, const Stats  stats)
     : name(std::move(name)), description(std::move(desc)), stats(stats) {}
 
-    Creature::~Creature() {
-        printf("Creature is destroyed");
-    }
-
     Creature Creature::fromJsonFile(const std::string& filepath) {
         std::ifstream file(filepath);
         if (!file.is_open()) {
@@ -36,22 +32,6 @@ namespace DespoilerEngine {
         };
 
         return {j["name"].get<std::string>(), j["desc"].get<std::string>() , stats};
-    }
-
-    void Creature::toJsonFile(const std::string& filepath) const {
-        json j;
-        j["name"] = name;
-        j["description"] = description;
-        j["stats"]["vigor"] = stats.vigor;
-        j["stats"]["strength"] = stats.strength;
-        j["stats"]["agility"] = stats.agility;
-        j["stats"]["intelligence"] = stats.intelligence;
-
-        std::ofstream file(filepath);
-        if (!file.is_open()) {
-            throw std::runtime_error("Could not open file for writing: " + filepath);
-        }
-        file << j.dump(4); // Pretty-print with 4 spaces
     }
 
     const std::string& Creature::getName() const {

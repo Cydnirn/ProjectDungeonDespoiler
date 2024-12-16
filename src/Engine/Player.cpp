@@ -7,11 +7,11 @@
 #include <iostream>
 
 namespace DespoilerEngine {
-  Player::Player(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst): Entity(texture, src, dst) {
+  Player::Player(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst): Entity(texture, src, dst)  {
     this->e_texture = texture;
     this->e_src = src;
     this->e_dst = dst;
-    this->inventory->addItem("Sword", Game::ItemsCol->getItem("Sword"));
+    this->inventory->addItem(Game::ItemsCol->getItem("Sword").name, Game::ItemsCol->getItem("Sword"));
   }
 
   void Player::handleEvent(SDL_Event &e) {
