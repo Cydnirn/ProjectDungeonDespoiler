@@ -31,20 +31,7 @@ public:
     static bool checkCollision(std::vector<SDL_Rect>& a, std::vector<SDL_Rect>&b);
 
 private:
-    typedef struct
-    {
-        uint_fast8_t x;
-        uint_fast8_t y;
-    } vec2ui;
-
-    typedef struct {
-      int_fast8_t x;
-      int_fast8_t y;
-    } vec2i;
-
     void loadEssentials();
-
-
 };
 
 } // ProjectDungeonDespoiler
