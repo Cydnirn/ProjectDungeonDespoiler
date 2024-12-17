@@ -23,7 +23,7 @@ public:
   static const int p_Height = 50;
 
   // Velocity of the player
-  static const int p_vel = 10;
+  static const int p_vel = 5;
 
   void handleEvent(SDL_Event &e, int &index) override;
   [[maybe_unused]] std::vector<SDL_Rect>& getColliders();
