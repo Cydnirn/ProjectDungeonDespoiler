@@ -30,7 +30,19 @@ namespace DespoilerEngine {
 void Map::run(int &state) const {
   clear();
   this->render(0, 0, BgTextureMain);
-  this->renderScaled(20, 20, WallTexture, 25, 25);
+    for (size_t row = 0; row < mapArray.size(); ++row) {
+      for (size_t col = 0; col < mapArray[row].size(); ++col) {
+        if (mapArray[row][col] == 1) { // Jika '1', render wall
+          SDL_Rect dstRect = {
+            static_cast<int>(col * tileSize), // x
+            static_cast<int>(row * tileSize), // y
+            tileSize,                         // width
+            tileSize                          // height
+        };
+          this->renderScaled(dstRect.x, dstRect.y, WallTexture,25,25);
+        }
+      }
+    }
   this->renderScaled(50, 50, p_texture, 250, 250);
   this->renderCenter(0, -210, "Dungeon Despoiler", Game::font, {255, 255, 255});
   this->render(player);
