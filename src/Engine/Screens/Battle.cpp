@@ -76,7 +76,6 @@ namespace DespoilerEngine {
   }
 
   void BattleScene::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex)  {
-    Master->handleEvents();
     if(Master->getCreatureParticipant().size() == 0){
       currentIndex = 1;
       return;

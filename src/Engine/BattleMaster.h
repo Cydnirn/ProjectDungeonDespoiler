@@ -20,11 +20,8 @@ public:
   void init();
   void push_creature(const Creature& creature);
   void del_creature(int index);
-  void endBattle();
   void runBattle(Creature &attacker, std::shared_ptr<Player> &defender);
   void runBattle(std::shared_ptr<Player> &attacker, Creature &defender);
-  void AttackLog();
-  void handleEvents();
   void clear();
 
 private:

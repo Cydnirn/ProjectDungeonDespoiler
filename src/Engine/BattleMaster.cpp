@@ -62,21 +62,11 @@ namespace DespoilerEngine {
   }
 
 
-  void BattleMaster::AttackLog() {
-    printf("Attack log");
-  }
-
-  void BattleMaster::handleEvents(){
-  }
-
   void BattleMaster::clear() {
     printf("BattleMaster is cleared \n");
     CreatureParticipant.clear();
   }
 
-  void BattleMaster::endBattle() {
-        printf("Battle has ended");
-  }
 
   BattleMaster::~BattleMaster() {
     printf("BattleMaster is destroyed \n");
