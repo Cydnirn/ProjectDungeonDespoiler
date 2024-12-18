@@ -18,17 +18,8 @@ namespace DespoilerEngine {
     loadIcon("./resources/Textures/icon.ico");
     BgTextureMain = loadTexture("./resources/Textures/background.png");
     WallTexture = loadTexture("./resources/Textures/wall.png");
-    if (WallTexture == nullptr) {
-      std::cerr << "Failed to load wall texture: " << SDL_GetError() << std::endl;
-      return;
-    }
-    // Set posisi dan ukuran wall (contoh).
-    WallRect = {100, 100, 64, 64};
     FinishTexture = loadTexture("./resources/Textures/finish.png");
-    if (FinishTexture == nullptr) {
-      std::cerr << "Failed to load finish texture: " << SDL_GetError() << std::endl;
-      return;
-    }
+
 
   }
 
