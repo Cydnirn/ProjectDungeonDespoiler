@@ -98,8 +98,7 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
       bool collision = false;
       SDL_Rect playerRect = player->getRect();
       collision = checkCollision(playerRect, currentIndex);
-  player->handleEvent(event, currentIndex, collision);
-      collision = false;
+    player->handleEvent(event, currentIndex, collision);
     if (event.type == SDL_QUIT)
     {
       isRunning = false;

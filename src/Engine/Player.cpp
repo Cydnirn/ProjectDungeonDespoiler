@@ -20,7 +20,7 @@ namespace DespoilerEngine {
     this->setBaseDamage(this->inventory->get("Sword")->base);
   }
 
-  void Player::handleEvent(SDL_Event &e, int &index, bool collision) {
+  void Player::handleEvent(SDL_Event &e, int &index, bool &collision) {
     // If a key was pressed
     auto state = SDL_GetKeyboardState(nullptr);
     moveUp = (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]) > 0;
@@ -33,14 +33,11 @@ namespace DespoilerEngine {
     }
     SDL_Rect prevPos = e_dst;
     std::cout << "Player previous position: " << prevPos.x << ", " << prevPos.y << std::endl;
-    if(!collision){
-        if(moveUp) e_dst.y -= p_vel;
-        if(moveDown) e_dst.y += p_vel;
-        if(moveLeft) e_dst.x -= p_vel;
-        if(moveRight) e_dst.x += p_vel;
-    }else {
-        e_dst = prevPos;
-    }
+    if(moveUp) {e_dst.y -= p_vel; prevPos.y += p_vel;}
+    if(moveDown) {e_dst.y += p_vel; prevPos.y -= p_vel;};
+    if(moveLeft) {e_dst.x -= p_vel; prevPos.x += p_vel;};
+    if(moveRight) {e_dst.x += p_vel; prevPos.x -= p_vel;};
+    if(collision) e_dst = prevPos;
 
     std::cout << "Player position: " << e_dst.x << ", " << e_dst.y << std::endl;
   }

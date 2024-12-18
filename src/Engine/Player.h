@@ -30,7 +30,7 @@ public:
   //Getter
   [[nodiscard]] SDL_Rect getRect() const { return e_dst; }
 
-  void handleEvent(SDL_Event &e, int &index, bool collision) override;
+  void handleEvent(SDL_Event &e, int &index, bool &collision) override;
   [[maybe_unused]] std::vector<SDL_Rect>& getColliders();
   std::shared_ptr<Items> Weapon;
 
