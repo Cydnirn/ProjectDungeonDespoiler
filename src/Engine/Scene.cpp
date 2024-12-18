@@ -157,6 +157,12 @@ SDL_Texture *Scene::loadTexture(const char *p_filePath) const {
     SDL_RenderClear(this->s_renderer);
   }
 
+  void Scene::clearRect(SDL_Rect rect) const {
+    SDL_SetRenderDrawColor(this->s_renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(this->s_renderer, &rect);
+    SDL_SetRenderDrawColor(this->s_renderer, 0, 0, 0, 255);
+  }
+
 
   void Scene::display() const {
     SDL_RenderPresent(this->s_renderer);

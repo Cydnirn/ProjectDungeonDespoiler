@@ -9,10 +9,10 @@
 
 namespace DespoilerEngine {
 struct Stats {
-  uint8_t vigor;
-  uint8_t strength;
-  uint8_t agility;
-  uint8_t intelligence;
+  int vigor;
+  int strength;
+  int agility;
+  int intelligence;
 };
 }
 

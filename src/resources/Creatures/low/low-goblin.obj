@@ -1,6 +1,10 @@
 {
     "name": "Low Goblin",
     "desc": "A Very basic Goblin",
+    "xp": 100,
+    "tex":"./resources/Textures/Creatures/Goblin.png",
+    "level": 1,
+    "baseDmg": 5,
     "stats": {
         "vigor": 1,
         "strength": 1,

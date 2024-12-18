@@ -18,31 +18,75 @@ namespace DespoilerEngine {
     loadIcon("./resources/Textures/icon.ico");
     BgTextureMain = loadTexture("./resources/Textures/background.png");
     WallTexture = loadTexture("./resources/Textures/wall.png");
-    if (WallTexture == nullptr) {
-      std::cerr << "Failed to load wall texture: " << SDL_GetError() << std::endl;
-      return;
-    }
+    FinishTexture = loadTexture("./resources/Textures/finish.png");
 
-    // Set posisi dan ukuran wall (contoh).
-    WallRect = {100, 100, 64, 64}; // x, y, width, height
+
   }
 
-void Map::run(int &state) const {
+  bool Map::checkCollision(const SDL_Rect a, const SDL_Rect b) {
+      if (a.y + a.h <= b.y) return false;
+      if (a.y >= b.y + b.h) return false;
+      if (a.x + a.w <= b.x) return false;
+      if (a.x >= b.x + b.w) return false;
+      return true;
+  }
+
+  bool Map::checkCollision(const SDL_Rect &playerRect, int &state) {
+      int playerLeft = playerRect.x / tileSize;
+      int playerRight = (playerRect.x + playerRect.w) / tileSize;
+      int playerTop = playerRect.y / tileSize;
+      int playerBottom = (playerRect.y + playerRect.h) / tileSize;
+
+      for (int row = playerTop; row <= playerBottom; ++row) {
+          for (int col = playerLeft; col <= playerRight; ++col) {
+              if (mapArray[row][col] == 1) { // If '1', it's a wall
+                  SDL_Rect tileRect = {
+                          col * tileSize, // x
+                          row * tileSize, // y
+                          tileSize,       // width
+                          tileSize        // height
+                  };
+                  if (checkCollision(playerRect, tileRect)) {
+                      return true;
+                  }
+              }
+              if (mapArray[row][col] == 2){
+                  SDL_Rect tileRect = {
+                          col * tileSize, // x
+                          row * tileSize, // y
+                          tileSize,       // width
+                          tileSize        // height
+                  };
+                  if(checkCollision(playerRect, tileRect)){
+                      state = 0;
+                      return true;
+                  }
+              }
+          }
+      }
+      return false;
+  }
+
+void Map::run(int &state) {
   clear();
   this->render(0, 0, BgTextureMain);
     for (size_t row = 0; row < mapArray.size(); ++row) {
       for (size_t col = 0; col < mapArray[row].size(); ++col) {
+        SDL_Rect dstRect = {
+          static_cast<int>(col * tileSize), // x
+          static_cast<int>(row * tileSize), // y
+          tileSize,                         // width
+          tileSize                          // height
+      };
+
         if (mapArray[row][col] == 1) { // Jika '1', render wall
-          SDL_Rect dstRect = {
-            static_cast<int>(col * tileSize), // x
-            static_cast<int>(row * tileSize), // y
-            tileSize,                         // width
-            tileSize                          // height
-        };
-          this->renderScaled(dstRect.x, dstRect.y, WallTexture,25,25);
+          this->renderScaled(dstRect.x, dstRect.y, WallTexture, tileSize, tileSize);
+        } else if (mapArray[row][col] == 2) { // Jika '2', render finish
+          this->renderScaled(dstRect.x, dstRect.y, FinishTexture, tileSize, tileSize);
         }
       }
     }
+
   this->renderScaled(50, 50, p_texture, 250, 250);
   this->renderCenter(0, -210, "Dungeon Despoiler", Game::font, {255, 255, 255});
   this->render(player);
@@ -50,8 +94,11 @@ void Map::run(int &state) const {
 }
 
 void Map::handleEvents(SDL_Event &event, bool &isRunning,
-                          int &currentIndex) const {
-  player->handleEvent(event);
+                          int &currentIndex)  {
+      bool collision = false;
+      SDL_Rect playerRect = player->getRect();
+      collision = checkCollision(playerRect, currentIndex);
+    player->handleEvent(event, currentIndex, collision);
     if (event.type == SDL_QUIT)
     {
       isRunning = false;
@@ -66,10 +113,6 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
         break;
       case SDLK_BACKSPACE:
         currentIndex = 0;
-        break;
-      case SDLK_RETURN:
-      case SDLK_KP_ENTER:
-        currentIndex = 2;
         break;
       default:
         break;
@@ -91,6 +134,11 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
       SDL_FreeSurface(p_img);
     }
     SDL_DestroyRenderer(this->s_renderer);
+    if (FinishTexture) {
+      SDL_DestroyTexture(FinishTexture);
+      FinishTexture = nullptr;
+    }
+
   }
 
   Map::~Map() {

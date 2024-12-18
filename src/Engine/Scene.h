@@ -21,6 +21,7 @@ public:
   SDL_Texture *loadTexture(const char *p_filePath) const;
   void loadIcon(const char *p_filePath) const;
   void clear() const override;
+  void clearRect(SDL_Rect rect) const override;
   void render(Entity *entity) const;
   void render(std::shared_ptr<Entity> entity) const;
   void render(int x, int y, SDL_Texture *p_tex) const override;
