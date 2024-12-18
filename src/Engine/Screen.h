@@ -35,6 +35,7 @@ public:
         SCREEN_HEIGHT(p_height) {};
   virtual void handleEvents(SDL_Event& event, bool& isRunning, int& currentIndex) = 0;
   virtual void clear() const = 0;
+  virtual void clearRect(SDL_Rect rect) const = 0;
   virtual void cleanUp() const = 0;
   virtual void init()  = 0;
   virtual void run(int &state) = 0;

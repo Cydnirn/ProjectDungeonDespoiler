@@ -39,7 +39,7 @@ namespace DespoilerEngine {
         int damage = attacker.getBaseDamage();
         bool critical = RandomGenerator::generateRandomNumber(1, 100) < attacker.getBaseCritical();
         if(critical){
-          damage *= 2;
+          damage *= attacker.getStats().strength;
         }
         bool missed = RandomGenerator::generateRandomNumber(1, 100) < (defender->getStats().agility - attacker.getStats().agility);
         if(missed){
@@ -52,7 +52,7 @@ namespace DespoilerEngine {
         int damage = attacker->getBaseDamage();
         bool critical = RandomGenerator::generateRandomNumber(1, 100) < attacker->getBaseCritical();
         if(critical){
-          damage *= 2;
+          damage *= attacker->getStats().strength;
         }
         bool missed = RandomGenerator::generateRandomNumber(1, 100) < (defender.getStats().agility - attacker->getStats().agility);
         if(missed){

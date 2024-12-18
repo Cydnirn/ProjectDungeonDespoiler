@@ -41,19 +41,15 @@ namespace DespoilerEngine {
 
   void BattleScene::run(int &state) {
     clear();
+    this->render(0,0,BgTextureBattle);
+    int screenWidth = *this->getScreenWidth();
     unsigned long creatureCount = Master->getCreatureParticipant().size();
     if(creatureCount == 0){
       return;
     }
-    if(!isPlayer){
-      Master->runBattle(Master->getCreatureParticipant()[RandomGenerator::generateRandomNumber(0, Master->getCreatureParticipant().size())], Master->getPlayerParticipant());
-      isPlayer = true;
-    }
-    this->render(0,0,BgTextureBattle);
-    int screenWidth = *this->getScreenWidth();
     int creatureWidth = screenWidth / static_cast<int>(creatureCount);
     for(size_t i = 0; i < creatureCount; i++){
-      SDL_Color color = (i == c_selected)  ? SDL_Color{255,0,0,0} : SDL_Color{255,255,255,0};
+      SDL_Color color = (i == c_selected && s_creature)  ? SDL_Color{255,0,0,0} : SDL_Color{255,255,255,0};
       int xPos = i * creatureWidth;
       std::string healthStatus = std::to_string(Master->getCreatureParticipant()[i].getHealth()) + "/" + std::to_string(Master->getCreatureParticipant()[i].getMaxHealth());
       this->render(xPos + 15 + Master->getCreatureParticipant()[i].getName().length() * 5, 25, Master->getCreatureParticipant()[i].getName().c_str(), Game::font, color);
@@ -66,14 +62,30 @@ namespace DespoilerEngine {
     }
     for(size_t i = 0; i < BattleOptions.size(); i++){
       SDL_Color color = (i == selected)  ? SDL_Color{255,0,0,0} : SDL_Color{255,255,255,0};
-      this->renderText(this->s_renderer, Game::font, BattleOptions[i].text, BattleOptions[i].rect.x, BattleOptions[i].rect.y, color);
+      renderText(this->s_renderer, Game::font, BattleOptions[i].text, BattleOptions[i].rect.x, BattleOptions[i].rect.y, color);
       if(i == selected) {
         SDL_RenderDrawLine(this->s_renderer, BattleOptions[i].rect.x, BattleOptions[i].rect.y + BattleOptions[i].rect.h, BattleOptions[i].rect.x + BattleOptions[i].rect.w, BattleOptions[i].rect.y + BattleOptions[i].rect.h);
       }
     }
-    this->renderText(this->s_renderer, Game::font, "Player", 400, 300, {255,255,255,0});
+    renderText(this->s_renderer, Game::font, "Player", 400, 300, {255,255,255,0});
     std::string playerHealth = std::to_string(player->getHealth()) + "/" + std::to_string(player->getMaxHealth());
-        this->renderText(this->s_renderer, Game::font, playerHealth, 400, 350, {255,255,255,0});
+    renderText(this->s_renderer, Game::font, playerHealth, 400, 350, {255,255,255,0});
+    if(!isPlayer){
+        SDL_Rect textRect = {400,400, 300, 5};
+        for(auto &Creature: Master->getCreatureParticipant()) {
+            clearRect(textRect);
+            renderText(this->s_renderer,
+                             Game::font,
+                             Creature.getName() + " turn", 400, 400,
+                             {255, 255, 255, 0});
+            display();
+            SDL_Delay(1500);
+            SDL_PumpEvents();
+            Master->runBattle(Creature, Master->getPlayerParticipant());
+        }
+        s_creature = false, s_menu = true;
+        isPlayer = true;
+    }
     display();
   }
 
@@ -103,7 +115,6 @@ namespace DespoilerEngine {
           if(s_menu && selected == 0) {
             s_menu = false;
             s_creature = true;
-            std::cout << "Selected: " << selected << std::endl;
             break;
           }
           if(s_creature) {
@@ -111,11 +122,11 @@ namespace DespoilerEngine {
               Master->runBattle(Master->getPlayerParticipant(), Master->getCreatureParticipant()[c_selected]);
               if(Master->getCreatureParticipant()[c_selected].getHealth() <= 0){
                 Master->del_creature(c_selected);
+                if(c_selected >= Master->getCreatureParticipant().size()){
+                  c_selected = 0;
+                }
               }
               isPlayer = false;
-            } else {
-              Master->runBattle(Master->getCreatureParticipant()[RandomGenerator::generateRandomNumber(0, Master->getCreatureParticipant().size())], player);
-              isPlayer = true;
             }
             break;
           }
