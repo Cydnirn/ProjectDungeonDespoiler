@@ -80,13 +80,13 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
                 };
                 if (mapArray[row][col] == 1) {
                     if (checkCollision(playerRect, tileRect)) {
-                        collision = true;
+                        collision = false;
                         std::cout << "Collision detected at: (" << tileRect.x << ", " << tileRect.y << ")\n";
                         break;
                     }
                 } else if (mapArray[row][col] == 2) {
                     if (checkCollision(playerRect, tileRect)) {
-                        currentIndex = 1;
+                        currentIndex =0 ;
                         break;
                     }
                 }
