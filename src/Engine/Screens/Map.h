@@ -23,13 +23,14 @@ public:
                     int &currentIndex)  override;
 
 private:
-  mutable SDL_Texture *BgTextureMain;
-  mutable SDL_Texture *p_texture{};
-  mutable SDL_Surface *p_img{};
-  mutable SDL_Texture *WallTexture{};
-  SDL_Rect WallRect{};
-  std::shared_ptr<Player> player;
-  mutable SDL_Texture *FinishTexture{};
+    bool checkCollision(const SDL_Rect a, const SDL_Rect b) ;
+    mutable SDL_Texture *BgTextureMain;
+    mutable SDL_Texture *p_texture{};
+    mutable SDL_Surface *p_img{};
+    mutable SDL_Texture *WallTexture{};
+    SDL_Rect WallRect{};
+    std::shared_ptr<Player> player;
+    mutable SDL_Texture *FinishTexture{};
 
 
   // Representasi peta

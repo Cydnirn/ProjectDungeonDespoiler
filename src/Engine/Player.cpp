@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "RandomGenerator.h"
 #include <SDL_image.h>
+#include <iostream>
 
 namespace DespoilerEngine {
   Player::Player(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst)
@@ -19,7 +20,7 @@ namespace DespoilerEngine {
     this->setBaseDamage(this->inventory->get("Sword")->base);
   }
 
-  void Player::handleEvent(SDL_Event &e, int &index) {
+  void Player::handleEvent(SDL_Event &e, int &index, bool collision) {
     // If a key was pressed
     auto state = SDL_GetKeyboardState(nullptr);
     moveUp = (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]) > 0;
@@ -30,18 +31,14 @@ namespace DespoilerEngine {
       bool toBattle = RandomGenerator::generateRandomFloat(1.00, 100.00) < battle_chance;
       if(toBattle) index = 2;
     }
-    if(moveUp){
-        e_dst.y -= p_vel;
+    if(!collision){
+        if(moveUp) e_dst.y -= p_vel;
+        if(moveDown) e_dst.y += p_vel;
+        if(moveLeft) e_dst.x -= p_vel;
+        if(moveRight) e_dst.x += p_vel;
     }
-    if(moveDown){
-      e_dst.y += p_vel;
-    }
-    if(moveLeft){
-      e_dst.x -= p_vel;
-    }
-    if(moveRight){
-      e_dst.x += p_vel;
-    }
+
+    std::cout << "Player position: " << e_dst.x << ", " << e_dst.y << std::endl;
   }
 
   [[maybe_unused]] std::vector<SDL_Rect>& Player::getColliders() {

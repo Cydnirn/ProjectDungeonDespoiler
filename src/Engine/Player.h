@@ -20,14 +20,17 @@ class Player final : public Entity, public Creature {
 public:
   Player(SDL_Texture* texture, SDL_Rect src, SDL_Rect dst);
   ~Player() override = default;
-  static const int p_Width = 25;
-  static const int p_Height = 25;
-  const float battle_chance = 20;
+  static const int p_Width = 15;
+  static const int p_Height = 15;
+  const float battle_chance = 0;
 
   // Velocity of the player
   static const int p_vel = 5;
 
-  void handleEvent(SDL_Event &e, int &index) override;
+  //Getter
+  [[nodiscard]] SDL_Rect getRect() const { return e_dst; }
+
+  void handleEvent(SDL_Event &e, int &index, bool collision) override;
   [[maybe_unused]] std::vector<SDL_Rect>& getColliders();
   std::shared_ptr<Items> Weapon;
 
@@ -42,11 +45,6 @@ private:
 
 
   std::vector<SDL_Rect> pColliders;
-};
-
-class PlayerCreature : Creature {
-  PlayerCreature(std::string name, std::string desc, Stats stats, int xp = 100, int baseDmg = 10);
-  ~PlayerCreature()  = default;
 };
 
 } // namespace DespoilerEngine

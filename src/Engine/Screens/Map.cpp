@@ -32,6 +32,14 @@ namespace DespoilerEngine {
 
   }
 
+  bool Map::checkCollision(const SDL_Rect a, const SDL_Rect b) {
+      if (a.y + a.h <= b.y) return false;
+      if (a.y >= b.y + b.h) return false;
+      if (a.x + a.w <= b.x) return false;
+      if (a.x >= b.x + b.w) return false;
+      return true;
+  }
+
 void Map::run(int &state) {
   clear();
   this->render(0, 0, BgTextureMain);
@@ -60,7 +68,32 @@ void Map::run(int &state) {
 
 void Map::handleEvents(SDL_Event &event, bool &isRunning,
                           int &currentIndex)  {
-  player->handleEvent(event, currentIndex);
+      bool collision = false;
+      SDL_Rect playerRect = player->getRect();
+      for (size_t row = 0; row < mapArray.size(); ++row) {
+          for (size_t col = 0; col < mapArray[row].size(); ++col) {
+              SDL_Rect tileRect = {
+                      static_cast<int>(col * tileSize), // x
+                    static_cast<int>(row * tileSize), // y
+                    tileSize - 15,                         // width
+                    tileSize - 15                          // height
+                };
+                if (mapArray[row][col] == 1) {
+                    if (checkCollision(playerRect, tileRect)) {
+                        collision = true;
+                        std::cout << "Collision detected at: (" << tileRect.x << ", " << tileRect.y << ")\n";
+                        break;
+                    }
+                } else if (mapArray[row][col] == 2) {
+                    if (checkCollision(playerRect, tileRect)) {
+                        currentIndex = 1;
+                        break;
+                    }
+                }
+            }
+          if (collision) break;
+      }
+  player->handleEvent(event, currentIndex, collision);
     if (event.type == SDL_QUIT)
     {
       isRunning = false;
