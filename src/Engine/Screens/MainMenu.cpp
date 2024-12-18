@@ -14,7 +14,7 @@ void MainMenu::init() {
  }
 
 
-void MainMenu::run(int &state) const {
+void MainMenu::run(int &state)  {
    clear();
    this->render(0, 0, BgTextureMain);
    this->renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});

@@ -22,12 +22,14 @@ public:
               std::shared_ptr<CreatureCollection> creatures,
               std::shared_ptr<Player> player);
   void init() override;
-  void run(int &state) const override;
+  void run(int &state) override;
   void cleanUp() const override;
   void handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex) override;
 
 private:
-  int selected = 0;
+  int selected = 0, c_selected = 0;
+  //s = selected, c = creature
+  bool isPlayer = true, s_menu = true, s_creature = false;
   std::vector<MenuOption> BattleOptions = {
     {"Attack", {50, 300, 0, 0}},
     {"Defend", {50, 350, 0, 0}},

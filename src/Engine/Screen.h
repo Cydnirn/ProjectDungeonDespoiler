@@ -37,7 +37,7 @@ public:
   virtual void clear() const = 0;
   virtual void cleanUp() const = 0;
   virtual void init()  = 0;
-  virtual void run(int &state) const = 0;
+  virtual void run(int &state) = 0;
   virtual void render(int x, int y, SDL_Texture* p_tex) const = 0;
   virtual void render(TTF_Font *font,
                       std::pmr::vector<TextDisplay> Texts) const = 0;

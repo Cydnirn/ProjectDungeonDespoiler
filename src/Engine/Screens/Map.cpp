@@ -32,7 +32,7 @@ namespace DespoilerEngine {
 
   }
 
-void Map::run(int &state) const {
+void Map::run(int &state) {
   clear();
   this->render(0, 0, BgTextureMain);
     for (size_t row = 0; row < mapArray.size(); ++row) {
