@@ -3,10 +3,10 @@
 //
 
 #include "BattleMaster.h"
+#include "Creature.h"
+#include "RandomGenerator.h"
 #include <memory>
 #include <vector>
-#include <memory>
-#include "Creature.h"
 
 namespace DespoilerEngine {
   BattleMaster::BattleMaster( std::shared_ptr<Player> player)
@@ -31,13 +31,36 @@ namespace DespoilerEngine {
     printf("Player: %s \n", PlayerParticipant->getName().c_str());
   }
 
-  void BattleMaster::runBattle() {
-        printf("Battle is running");
+  void BattleMaster::del_creature(int index) {
+    CreatureParticipant.erase(CreatureParticipant.begin() + index);
   }
 
-  void BattleMaster::runBattle(int &state) {
-    printf("Battle is running");
+  void BattleMaster::runBattle(Creature &attacker, std::shared_ptr<Player> &defender) {
+        int damage = attacker.getBaseDamage();
+        bool critical = RandomGenerator::generateRandomNumber(1, 100) < attacker.getBaseCritical();
+        if(critical){
+          damage *= 2;
+        }
+        bool missed = RandomGenerator::generateRandomNumber(1, 100) < (defender->getStats().agility - attacker.getStats().agility);
+        if(missed){
+          damage = 0;
+        }
+        defender->setHealth(defender->getHealth() - damage);
   }
+
+  void BattleMaster::runBattle(std::shared_ptr<Player> &attacker, DespoilerEngine::Creature &defender) {
+        int damage = attacker->getBaseDamage();
+        bool critical = RandomGenerator::generateRandomNumber(1, 100) < attacker->getBaseCritical();
+        if(critical){
+          damage *= 2;
+        }
+        bool missed = RandomGenerator::generateRandomNumber(1, 100) < (defender.getStats().agility - attacker->getStats().agility);
+        if(missed){
+          damage = 0;
+        }
+        defender.setHealth(defender.getHealth() - damage);
+  }
+
 
   void BattleMaster::AttackLog() {
     printf("Attack log");
