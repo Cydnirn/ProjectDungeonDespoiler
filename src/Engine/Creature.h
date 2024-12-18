@@ -21,7 +21,7 @@ class Creature {
     std::string tex;
 public:
     ~Creature() = default;
-    Creature(std::string  name, std::string  desc, Stats  stats, int xp = 100, int baseDmg = 10, std::string tex);
+    Creature(std::string  name, std::string  desc, Stats  stats, int xp = 100, int baseDmg = 10, std::string tex = "");
 
     // Load a creature from a JSON file
     static Creature fromJsonFile(const std::string& filepath);
@@ -37,6 +37,7 @@ public:
     [[nodiscard]] const int& getMana() const { return mana; };
     [[nodiscard]] const int& getXP() const { return xp; };
     [[nodiscard]] const int& getLevel() const { return level; };
+    [[nodiscard]] const std::string& getTexture() const {return tex; };
     // Setters
     void setBaseDamage(int baseDmg) { this->baseDamage = baseDmg; }
     void setHealth(int healthInput) { this->health = healthInput; }

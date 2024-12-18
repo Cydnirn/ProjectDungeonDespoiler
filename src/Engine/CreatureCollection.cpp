@@ -42,6 +42,4 @@ namespace DespoilerEngine {
         return Creatures[index];
     }
 
-    CreatureCollection::~CreatureCollection() =default;
-
 } // DespoilerEngine
