@@ -12,8 +12,8 @@
 using json = nlohmann::json;
 
 namespace DespoilerEngine {
-    Creature::Creature(std::string  name, std::string  desc, const Stats  stats, int xp, int baseDmg)
-    : name(std::move(name)), description(std::move(desc)), stats(stats), xp(xp), baseDamage(baseDmg) {}
+    Creature::Creature(std::string  name, std::string  desc, const Stats  stats, int xp, int baseDmg, std::string texture)
+    : description(std::move(desc)), name(std::move(name)), stats(stats), baseDamage(baseDmg), xp(xp), tex(std::move(texture)) {}
 
     Creature Creature::fromJsonFile(const std::string& filepath) {
         std::ifstream file(filepath);
@@ -31,7 +31,7 @@ namespace DespoilerEngine {
             j["stats"]["intelligence"].get<int>()
         };
 
-        return {j["name"].get<std::string>(), j["desc"].get<std::string>(), stats, j["xp"].get<int>(), j["baseDmg"].get<int>()};
+        return {j["name"].get<std::string>(), j["desc"].get<std::string>(), stats, j["xp"].get<int>(), j["baseDmg"].get<int>(), j["tex"].get<std::string>()};
     }
 
 

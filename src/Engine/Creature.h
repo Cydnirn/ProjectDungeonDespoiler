@@ -18,9 +18,10 @@ class Creature {
     int mana = 10 * stats.intelligence;
     int xp = 100;
     int level = xp / 100;
+    std::string tex;
 public:
     ~Creature() = default;
-    Creature(std::string  name, std::string  desc, Stats  stats, int xp = 100, int baseDmg = 10);
+    Creature(std::string  name, std::string  desc, Stats  stats, int xp = 100, int baseDmg = 10, std::string tex);
 
     // Load a creature from a JSON file
     static Creature fromJsonFile(const std::string& filepath);
