@@ -12,12 +12,8 @@
 using json = nlohmann::json;
 
 namespace DespoilerEngine {
-    Creature::Creature(std::string  name, std::string  desc, const Stats  stats)
-    : name(std::move(name)), description(std::move(desc)), stats(stats) {}
-
-    Creature::~Creature() {
-        printf("Creature is destroyed");
-    }
+    Creature::Creature(std::string  name, std::string  desc, const Stats  stats, int xp, int baseDmg, std::string texture)
+    : description(std::move(desc)), name(std::move(name)), stats(stats), baseDamage(baseDmg), xp(xp), tex(std::move(texture)) {}
 
     Creature Creature::fromJsonFile(const std::string& filepath) {
         std::ifstream file(filepath);
@@ -29,42 +25,15 @@ namespace DespoilerEngine {
         file >> j;
 
         Stats stats = {
-            j["stats"]["vigor"].get<uint8_t>(),
-            j["stats"]["strength"].get<uint8_t>(),
-            j["stats"]["agility"].get<uint8_t>(),
-            j["stats"]["intelligence"].get<uint8_t>()
+            j["stats"]["vigor"].get<int>(),
+            j["stats"]["strength"].get<int>(),
+            j["stats"]["agility"].get<int>(),
+            j["stats"]["intelligence"].get<int>()
         };
 
-        return {j["name"].get<std::string>(), j["desc"].get<std::string>() , stats};
+        return {j["name"].get<std::string>(), j["desc"].get<std::string>(), stats, j["xp"].get<int>(), j["baseDmg"].get<int>(), j["tex"].get<std::string>()};
     }
 
-    void Creature::toJsonFile(const std::string& filepath) const {
-        json j;
-        j["name"] = name;
-        j["description"] = description;
-        j["stats"]["vigor"] = stats.vigor;
-        j["stats"]["strength"] = stats.strength;
-        j["stats"]["agility"] = stats.agility;
-        j["stats"]["intelligence"] = stats.intelligence;
-
-        std::ofstream file(filepath);
-        if (!file.is_open()) {
-            throw std::runtime_error("Could not open file for writing: " + filepath);
-        }
-        file << j.dump(4); // Pretty-print with 4 spaces
-    }
-
-    const std::string& Creature::getName() const {
-        return name;
-    }
-
-    const Stats& Creature::getStats() const {
-        return stats;
-    }
-
-    const int* Creature::getHealth() const {
-        return &health;
-    }
 
 
 } // DungeonDespoiler

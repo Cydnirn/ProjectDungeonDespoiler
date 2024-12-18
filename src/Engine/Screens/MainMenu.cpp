@@ -14,7 +14,7 @@ void MainMenu::init() {
  }
 
 
-void MainMenu::run(int &state) const {
+void MainMenu::run(int &state)  {
    clear();
    this->render(0, 0, BgTextureMain);
    this->renderCenter(0, -50, "Dungeon Despoiler", Game::font, {255, 255, 255});
@@ -25,7 +25,7 @@ void MainMenu::run(int &state) const {
 
 
 void MainMenu::handleEvents(SDL_Event &event, bool &isRunning,
-                            int &currentIndex) const {
+                            int &currentIndex)  {
     if (event.type == SDL_QUIT)
     {
       isRunning = false;

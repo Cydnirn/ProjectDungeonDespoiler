@@ -3,20 +3,22 @@
 //
 
 #include "Inventory.h"
+#include "Items.h"
 #include <string>
-#include <algorithm>
 
 namespace DespoilerEngine {
-  void Inventory::addItem(Items item) {
-    items.push_back(item);
+  void Inventory::addItem(std::string name, Items item) {
+    items.insert({name,item});
   }
 
   void Inventory::removeItem(std::string name) {
-    for(int i = 0; i < items.size(); i++) {
-      if(items[i].name == name) {
-        items.erase(items.begin() + i);
-        break;
-      }
-    }
+    items.erase(name);
   }
-} // namespace DespoilerEngine
+  Items *Inventory::get(std::string name) {
+    auto item = items.find(name);
+    if(item != items.end()){
+      return &item->second;
+    }
+    return nullptr;
+  }
+  } // namespace DespoilerEngine

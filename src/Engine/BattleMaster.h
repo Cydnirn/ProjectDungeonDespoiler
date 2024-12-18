@@ -14,18 +14,26 @@ namespace DespoilerEngine {
 
 class BattleMaster {
 public:
-  BattleMaster(std::vector<Creature> creatures, std::shared_ptr<Player> player);
+  explicit BattleMaster(std::shared_ptr<Player> player);
   ~BattleMaster();
-  void startBattle();
-  void endBattle();
-  void runBattle();
-  void runBattle(int &state);
-  void AttackLog();
-  void handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex);
+  static std::unique_ptr<BattleMaster> getInstance(std::shared_ptr<Player> player);
+  void init();
+  void push_creature(const Creature& creature);
+  void del_creature(int index);
+  void runBattle(Creature &attacker, std::shared_ptr<Player> &defender);
+  void runBattle(std::shared_ptr<Player> &attacker, Creature &defender);
   void clear();
+
 private:
   std::vector<Creature> CreatureParticipant;
   std::shared_ptr<Player> PlayerParticipant;
+  uint32_t turn = 0;
+
+public:
+  //Getter
+  [[nodiscard]] std::vector<Creature>& getCreatureParticipant()  { return CreatureParticipant; };
+  [[nodiscard]] std::shared_ptr<Player>& getPlayerParticipant()  { return PlayerParticipant; };
+  [[nodiscard]] const uint32_t& getTurn() { return turn; };
 };
 
 } // namespace DespoilerEngine

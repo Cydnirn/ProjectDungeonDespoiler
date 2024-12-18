@@ -21,6 +21,11 @@ typedef struct TextDisplay {
   SDL_Color color;
 } TextDisplay;
 
+struct MenuOption{
+  std::string text;
+  SDL_Rect rect;
+};
+
 class Screen {
 public:
   virtual ~Screen() = default;
@@ -28,11 +33,12 @@ public:
          const int* p_height)
       : s_window(p_window), s_renderer(p_renderer), SCREEN_WIDTH(p_width),
         SCREEN_HEIGHT(p_height) {};
-  virtual void handleEvents(SDL_Event& event, bool& isRunning, int& currentIndex) const = 0;
+  virtual void handleEvents(SDL_Event& event, bool& isRunning, int& currentIndex) = 0;
   virtual void clear() const = 0;
+  virtual void clearRect(SDL_Rect rect) const = 0;
   virtual void cleanUp() const = 0;
   virtual void init()  = 0;
-  virtual void run(int &state) const = 0;
+  virtual void run(int &state) = 0;
   virtual void render(int x, int y, SDL_Texture* p_tex) const = 0;
   virtual void render(TTF_Font *font,
                       std::pmr::vector<TextDisplay> Texts) const = 0;
@@ -46,11 +52,32 @@ public:
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
   }
+  static void renderText(SDL_Renderer *renderer, TTF_Font *font,
+                         const std::string &text, const int x, const int y,
+                         const SDL_Color color, SDL_Rect* outRect) {
+    SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    //Set Rect
+    outRect->x = x;
+    outRect->y = y;
+    outRect->w = surface->w;
+    outRect->h = surface->h;
+    SDL_RenderCopy(renderer, texture, nullptr, outRect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+  }
 protected:
   SDL_Window * s_window;
   SDL_Renderer * s_renderer;
   const int * SCREEN_WIDTH;
   const int * SCREEN_HEIGHT;
+
+public:
+  //Getter
+  [[nodiscard]] SDL_Window* getWindow() const { return s_window; }
+  [[nodiscard]] SDL_Renderer* getRenderer() const { return s_renderer; }
+  [[nodiscard]] const int* getScreenWidth() const { return SCREEN_WIDTH; }
+  [[nodiscard]] const int* getScreenHeight() const { return SCREEN_HEIGHT; }
 };
 }
 #endif //SCREEN_H

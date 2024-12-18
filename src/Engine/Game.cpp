@@ -3,13 +3,14 @@
 //
 
 #include "Game.h"
-#include "CreatureLoader.h"
+#include "CreatureCollection.h"
 #include "ScreenManager.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <memory>
 
+#include "ItemsCollection.h"
 #include "Screens/Battle.h"
 #include "Screens/MainMenu.h"
 #include "Screens/Map.h"
@@ -17,13 +18,15 @@
 
 namespace DespoilerEngine {
     TTF_Font *Game::font = nullptr;
-    CreatureCollection LowCreatures;
+    auto LowCreatures = CreatureCollection::getInstance();
+    std::shared_ptr<ItemsCollection> Game::ItemsCol = ItemsCollection::getInstance();
     Game::Game() = default;
     auto Screens =  std::make_unique<ScreenManager>();
 
-    void Game::loadCreature()
+    void Game::loadEssentials()
     {
-        LowCreatures.Creatures = CreatureLoader::loadCreatures("./resources/Creatures/low");
+        Game::ItemsCol->loadItems("./resources/Items");
+        LowCreatures->loadCreatures("./resources/Creatures/low");
     }
 
     /**
@@ -34,6 +37,7 @@ namespace DespoilerEngine {
      */
     int Game::init()
     {
+        this->loadEssentials();
         this->SCREEN_WIDTH=720;
         this->SCREEN_HEIGHT = 480;
         this->fps=30;
@@ -98,12 +102,12 @@ namespace DespoilerEngine {
 
         const auto main_menu_window = std::make_shared<MainMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
         const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, player);
-        //const auto battle_window = std::make_shared<BattleScene>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
+        const auto battle_window = std::make_shared<BattleScene>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, LowCreatures, player);
 
         // Add screens to the screen loader
         Screens->addScreen(main_menu_window);
         Screens->addScreen(map_window);
-        //Screens->addScreen(battle_window);
+        Screens->addScreen(battle_window);
 
         return 0;
     }

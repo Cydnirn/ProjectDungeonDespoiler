@@ -1,6 +1,10 @@
 {
     "name": "Rat",
     "desc": "A basic rat",
+    "xp": 100,
+    "level": 1,
+    "baseDmg": 1,
+    "tex":"./resources/Textures/Creatures/Rat.png",
     "stats": {
         "vigor": 1,
         "strength": 1,
