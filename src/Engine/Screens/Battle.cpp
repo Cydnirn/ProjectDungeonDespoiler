@@ -41,15 +41,15 @@ namespace DespoilerEngine {
 
   void BattleScene::run(int &state) {
     clear();
+    unsigned long creatureCount = Master->getCreatureParticipant().size();
+    if(creatureCount == 0){
+      return;
+    }
     if(!isPlayer){
       Master->runBattle(Master->getCreatureParticipant()[RandomGenerator::generateRandomNumber(0, Master->getCreatureParticipant().size())], Master->getPlayerParticipant());
       isPlayer = true;
     }
     this->render(0,0,BgTextureBattle);
-    unsigned long creatureCount = Master->getCreatureParticipant().size();
-    if(creatureCount == 0){
-      return;
-    }
     int screenWidth = *this->getScreenWidth();
     int creatureWidth = screenWidth / static_cast<int>(creatureCount);
     for(size_t i = 0; i < creatureCount; i++){
@@ -61,6 +61,8 @@ namespace DespoilerEngine {
       if(i == c_selected){
         SDL_RenderDrawLine(this->s_renderer, xPos, 0, xPos + creatureWidth, 0);
       }
+      auto CreatureTexture = loadTexture(Master->getCreatureParticipant()[i].getTexture().c_str());
+      this->renderScaled(xPos + 15 + Master->getCreatureParticipant()[i].getName().length() * 5,105,CreatureTexture, 100, 100);
     }
     for(size_t i = 0; i < BattleOptions.size(); i++){
       SDL_Color color = (i == selected)  ? SDL_Color{255,0,0,0} : SDL_Color{255,255,255,0};
@@ -76,7 +78,7 @@ namespace DespoilerEngine {
   }
 
   void BattleScene::handleEvents(SDL_Event &event, bool &isRunning, int &currentIndex)  {
-    if(Master->getCreatureParticipant().size() == 0){
+    if(Master->getCreatureParticipant().empty()){
       currentIndex = 1;
       return;
     }
@@ -95,11 +97,6 @@ namespace DespoilerEngine {
             s_menu = true;
           }
           //currentIndex = 1;
-          break;
-        case SDLK_UP:
-          if(s_menu){
-            selected = (selected - 1 + BattleOptions.size()) % BattleOptions.size();
-          }
           break;
         case SDLK_RETURN:
         case SDLK_KP_ENTER:
@@ -122,18 +119,27 @@ namespace DespoilerEngine {
             }
             break;
           }
+          break;
+        case SDLK_UP:
+          if(s_menu){
+            selected = (selected - 1 + BattleOptions.size()) % BattleOptions.size();
+          }
+          break;
         case SDLK_DOWN:
           if(s_menu){
             selected = (selected + 1) % BattleOptions.size();
           }
+          break;
         case SDLK_RIGHT: //Select Creature
           if(s_creature){
             c_selected = (c_selected + 1) % Master->getCreatureParticipant().size();
           }
+          break;
         case SDLK_LEFT: //Select Creature
           if(s_creature){
             c_selected = (c_selected - 1 + Master->getCreatureParticipant().size()) % Master->getCreatureParticipant().size();
           }
+          break;
         default:
           break;
       }

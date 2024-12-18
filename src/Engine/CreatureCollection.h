@@ -14,7 +14,7 @@ namespace DespoilerEngine {
         static std::shared_ptr<CreatureCollection> getInstance();
         void loadCreatures(const std::string& directory = ".");
         Creature spawnRandomCreature();
-        ~CreatureCollection();
+        ~CreatureCollection() = default;
         CreatureCollection() = default;
       private:
         std::vector<Creature> Creatures;
