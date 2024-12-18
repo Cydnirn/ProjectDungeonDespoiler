@@ -24,6 +24,7 @@ public:
 
 private:
     bool checkCollision(const SDL_Rect a, const SDL_Rect b) ;
+    bool checkCollision(const SDL_Rect& playerRect, int &state);
     mutable SDL_Texture *BgTextureMain;
     mutable SDL_Texture *p_texture{};
     mutable SDL_Surface *p_img{};

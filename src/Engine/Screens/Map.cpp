@@ -40,6 +40,42 @@ namespace DespoilerEngine {
       return true;
   }
 
+  bool Map::checkCollision(const SDL_Rect &playerRect, int &state) {
+      int playerLeft = playerRect.x / tileSize;
+      int playerRight = (playerRect.x + playerRect.w) / tileSize;
+      int playerTop = playerRect.y / tileSize;
+      int playerBottom = (playerRect.y + playerRect.h) / tileSize;
+
+      for (int row = playerTop; row <= playerBottom; ++row) {
+          for (int col = playerLeft; col <= playerRight; ++col) {
+              if (mapArray[row][col] == 1) { // If '1', it's a wall
+                  SDL_Rect tileRect = {
+                          col * tileSize, // x
+                          row * tileSize, // y
+                          tileSize,       // width
+                          tileSize        // height
+                  };
+                  if (checkCollision(playerRect, tileRect)) {
+                      return true;
+                  }
+              }
+              if (mapArray[row][col] == 2){
+                  SDL_Rect tileRect = {
+                          col * tileSize, // x
+                          row * tileSize, // y
+                          tileSize,       // width
+                          tileSize        // height
+                  };
+                  if(checkCollision(playerRect, tileRect)){
+                      state = 0;
+                      return true;
+                  }
+              }
+          }
+      }
+      return false;
+  }
+
 void Map::run(int &state) {
   clear();
   this->render(0, 0, BgTextureMain);
@@ -70,29 +106,7 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
                           int &currentIndex)  {
       bool collision = false;
       SDL_Rect playerRect = player->getRect();
-      for (size_t row = 0; row < mapArray.size(); ++row) {
-          for (size_t col = 0; col < mapArray[row].size(); ++col) {
-              SDL_Rect tileRect = {
-                      static_cast<int>(col * tileSize), // x
-                    static_cast<int>(row * tileSize), // y
-                    tileSize - 25,                         // width
-                    tileSize - 25                          // height
-                };
-                if (mapArray[row][col] == 1) {
-                    if (checkCollision(playerRect, tileRect)) {
-                        collision = false;
-                        std::cout << "Collision detected at: (" << tileRect.x << ", " << tileRect.y << ")\n";
-                        break;
-                    }
-                } else if (mapArray[row][col] == 2) {
-                    if (checkCollision(playerRect, tileRect)) {
-                        currentIndex =0 ;
-                        break;
-                    }
-                }
-            }
-          if (collision) break;
-      }
+      collision = checkCollision(playerRect, currentIndex);
   player->handleEvent(event, currentIndex, collision);
       collision = false;
     if (event.type == SDL_QUIT)

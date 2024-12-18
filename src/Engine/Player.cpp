@@ -32,6 +32,7 @@ namespace DespoilerEngine {
       if(toBattle) index = 2;
     }
     SDL_Rect prevPos = e_dst;
+    std::cout << "Player previous position: " << prevPos.x << ", " << prevPos.y << std::endl;
     if(!collision){
         if(moveUp) e_dst.y -= p_vel;
         if(moveDown) e_dst.y += p_vel;
