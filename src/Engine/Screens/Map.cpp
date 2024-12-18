@@ -75,8 +75,8 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
               SDL_Rect tileRect = {
                       static_cast<int>(col * tileSize), // x
                     static_cast<int>(row * tileSize), // y
-                    tileSize - 15,                         // width
-                    tileSize - 15                          // height
+                    tileSize - 25,                         // width
+                    tileSize - 25                          // height
                 };
                 if (mapArray[row][col] == 1) {
                     if (checkCollision(playerRect, tileRect)) {
@@ -94,6 +94,7 @@ void Map::handleEvents(SDL_Event &event, bool &isRunning,
           if (collision) break;
       }
   player->handleEvent(event, currentIndex, collision);
+      collision = false;
     if (event.type == SDL_QUIT)
     {
       isRunning = false;

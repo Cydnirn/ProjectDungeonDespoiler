@@ -20,8 +20,8 @@ class Player final : public Entity, public Creature {
 public:
   Player(SDL_Texture* texture, SDL_Rect src, SDL_Rect dst);
   ~Player() override = default;
-  static const int p_Width = 15;
-  static const int p_Height = 15;
+  static const int p_Width = 25;
+  static const int p_Height = 25;
   const float battle_chance = 0;
 
   // Velocity of the player

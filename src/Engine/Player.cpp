@@ -31,11 +31,14 @@ namespace DespoilerEngine {
       bool toBattle = RandomGenerator::generateRandomFloat(1.00, 100.00) < battle_chance;
       if(toBattle) index = 2;
     }
+    SDL_Rect prevPos = e_dst;
     if(!collision){
         if(moveUp) e_dst.y -= p_vel;
         if(moveDown) e_dst.y += p_vel;
         if(moveLeft) e_dst.x -= p_vel;
         if(moveRight) e_dst.x += p_vel;
+    }else {
+        e_dst = prevPos;
     }
 
     std::cout << "Player position: " << e_dst.x << ", " << e_dst.y << std::endl;
