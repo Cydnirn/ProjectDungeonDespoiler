@@ -14,6 +14,7 @@
 #include "Screens/Battle.h"
 #include "Screens/MainMenu.h"
 #include "Screens/Map.h"
+#include "Screens/EndMenu.h"
 #include <iostream>
 
 namespace DespoilerEngine {
@@ -103,11 +104,13 @@ namespace DespoilerEngine {
         const auto main_menu_window = std::make_shared<MainMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
         const auto map_window = std::make_shared<Map>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, player);
         const auto battle_window = std::make_shared<BattleScene>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT, LowCreatures, player);
+        const auto end_window = std::make_shared<EndMenu>(this->MainWindow, this->s_renderer, &this->SCREEN_WIDTH, &this->SCREEN_HEIGHT);
 
         // Add screens to the screen loader
         Screens->addScreen(main_menu_window);
         Screens->addScreen(map_window);
         Screens->addScreen(battle_window);
+        Screens->addScreen(end_window);
 
         return 0;
     }

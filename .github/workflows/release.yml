@@ -1,0 +1,48 @@
+name: Release on tag
+
+on:
+  workflow_run:
+    workflows: ["CMake on multiple platforms"]
+    types:
+      - completed
+
+jobs:
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: ${{ runner.workspace }}/build
+
+      - name: Set reusable strings
+        id: strings
+        shell: bash
+        run: |
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            echo "build-output-dir=${{ github.workspace }}/bin/linux/release" >> "$GITHUB_OUTPUT"
+          else
+            echo "build-output-dir=${{ github.workspace }}/bin/win64/release" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Zip DungeonDespoiler folder
+        run: |
+          zip -r DungeonDespoiler.zip DungeonDespoiler
+        working-directory: ${{ steps.strings.outputs.build-output-dir }}
+
+      - name: Create Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: ${{ github.ref }}
+          title: Release ${{ github.ref }}
+          files: ${{ steps.strings.outputs.build-output-dir }}/DungeonDespoiler.zip
