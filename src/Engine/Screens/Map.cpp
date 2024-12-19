@@ -58,7 +58,7 @@ namespace DespoilerEngine {
                           tileSize        // height
                   };
                   if(checkCollision(playerRect, tileRect)){
-                      state = 0;
+                      state = 3;
                       return true;
                   }
               }

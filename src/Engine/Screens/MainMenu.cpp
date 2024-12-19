@@ -57,7 +57,7 @@ void MainMenu::cleanUp() const {
  }
 
 MainMenu::~MainMenu() {
-   printf("MainMenu is destroyed");cleanUp();}
+   printf("MainMenu is destroyed\n");cleanUp();}
 
 
 
