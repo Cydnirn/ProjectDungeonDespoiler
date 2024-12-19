@@ -9,7 +9,6 @@
 namespace DespoilerEngine {
 
   ScreenManager::~ScreenManager() {
-    printf("ScreenManager destroyed");
     clear();
   }
 
