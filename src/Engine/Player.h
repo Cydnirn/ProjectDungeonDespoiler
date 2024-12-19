@@ -22,7 +22,7 @@ public:
   ~Player() override = default;
   static const int p_Width = 25;
   static const int p_Height = 25;
-  const float battle_chance = 0;
+  const float battle_chance = 2.0;
 
   // Velocity of the player
   static const int p_vel = 5;

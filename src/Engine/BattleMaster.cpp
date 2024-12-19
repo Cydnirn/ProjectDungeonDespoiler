@@ -26,10 +26,7 @@ namespace DespoilerEngine {
     }
   }
 
-  void BattleMaster::init() {
-    printf("BattleMaster is initialized \n");
-    printf("Player: %s \n", PlayerParticipant->getName().c_str());
-  }
+  void BattleMaster::init() {}
 
   void BattleMaster::del_creature(int index) {
     CreatureParticipant.erase(CreatureParticipant.begin() + index);
@@ -63,13 +60,11 @@ namespace DespoilerEngine {
 
 
   void BattleMaster::clear() {
-    printf("BattleMaster is cleared \n");
     CreatureParticipant.clear();
   }
 
 
   BattleMaster::~BattleMaster() {
-    printf("BattleMaster is destroyed \n");
     BattleMaster::clear();
   }
 

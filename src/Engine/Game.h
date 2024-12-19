@@ -14,9 +14,7 @@ namespace DespoilerEngine {
 class Game {
 public:
     Game();
-    ~Game() {
-        printf("Game is destroyed");
-    };
+    ~Game() = default;
     SDL_Window* MainWindow{};
     SDL_Renderer* s_renderer{};
     int SCREEN_WIDTH{};
