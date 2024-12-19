@@ -41,6 +41,8 @@ add_executable(ProjectDungeonDespoiler src/main.cpp
         src/Engine/BattleMaster.h
         src/Engine/ItemsCollection.cpp
         src/Engine/ItemsCollection.h
+        src/Engine/Screens/EndMenu.cpp
+        src/Engine/Screens/EndMenu.h
 )
 
 target_link_libraries(ProjectDungeonDespoiler nlohmann_json::nlohmann_json OpenAL::OpenAL sdl_ttf::sdl_ttf SDL2_image::SDL2_image SDL2::SDL2main)

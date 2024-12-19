@@ -32,14 +32,14 @@ namespace DespoilerEngine {
       if(toBattle) index = 2;
     }
     SDL_Rect prevPos = e_dst;
-    std::cout << "Player previous position: " << prevPos.x << ", " << prevPos.y << std::endl;
+    //std::cout << "Player previous position: " << prevPos.x << ", " << prevPos.y << std::endl;
     if(moveUp) {e_dst.y -= p_vel; prevPos.y += p_vel;}
     if(moveDown) {e_dst.y += p_vel; prevPos.y -= p_vel;};
     if(moveLeft) {e_dst.x -= p_vel; prevPos.x += p_vel;};
     if(moveRight) {e_dst.x += p_vel; prevPos.x -= p_vel;};
     if(collision) e_dst = prevPos;
 
-    std::cout << "Player position: " << e_dst.x << ", " << e_dst.y << std::endl;
+    //std::cout << "Player position: " << e_dst.x << ", " << e_dst.y << std::endl;
   }
 
   [[maybe_unused]] std::vector<SDL_Rect>& Player::getColliders() {
